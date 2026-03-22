@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindCheck — Mental Health Analyser</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../static/css/style.css" />
+  <!-- If opening directly in browser (no server), use the line below instead and comment out the one above -->
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+</head>
+<body>
+ 
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">
+      <span class="dot"></span>MindCheck
+    </a>
+    <ul class="nav-links">
+      <li class="hide-mobile"><a href="#how">How it works</a></li>
+      <li><a href="questionnaire.html" class="nav-cta">Take the test</a></li>
+    </ul>
+  </nav>
+ 
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-badge"><span></span>Academic Research Project</div>
+      <h1 class="hero-title">
+        How are you <em>really</em><br>feeling today?
+      </h1>
+      <p class="hero-subtitle">
+        Answer 10 simple questions about your daily well-being. Our system analyses your responses and provides a personalised mental health snapshot — in under 3 minutes.
+      </p>
+      <div class="hero-actions">
+        <a href="questionnaire.html" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+          Start assessment
+        </a>
+        <a href="#how" class="btn-ghost">Learn how it works</a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Anonymous &amp; secure
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Under 3 minutes
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Not a medical tool
+        </div>
+      </div>
+    </div>
+ 
+ 
+  </section>
+ 
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="section-label">Process</div>
+    <h2 class="section-title">Three steps to clarity</h2>
+    <p class="section-sub">No sign-ups. No complexity. Just honest answers and a clear picture of where you stand.</p>
+ 
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-number">01</div>
+        <div class="how-chip chip-terra">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </div>
+        <h3>Answer 10 questions</h3>
+        <p>Each question explores a different dimension of your mental well-being — stress, sleep, mood, and more. Simple, honest options. No right or wrong answers.</p>
+      </div>
+ 
+      <div class="how-card">
+        <div class="how-number">02</div>
+        <div class="how-chip chip-sage">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        </div>
+        <h3>We analyse your responses</h3>
+        <p>Your answers are processed by our system. Each response is weighed against established well-being indicators to build an accurate picture.</p>
+      </div>
+ 
+      <div class="how-card">
+        <div class="how-number">03</div>
+        <div class="how-chip chip-warm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <h3>See your result</h3>
+        <p>You receive a clear mental health snapshot with context — what it means for you and what steps you can consider going forward.</p>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ANSWER HONESTLY -->
+  <section class="section" style="max-width: 640px; margin: 0 auto; padding-top: 0;">
+    <div class="honesty-card">
+      <div class="honesty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      </div>
+      <h3>Answer honestly</h3>
+      <p>This tool works best when you reflect genuinely. Your responses are private and used only to generate your personal result. There is nothing to gain from choosing any particular answer.</p>
+      <ul class="honesty-list">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          Take your time with each question
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          Go with your first instinct
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          Think about the past two weeks
+        </li>
+      </ul>
+    </div>
+    <div class="disclaimer" style="margin-top: 1.25rem;">
+      <strong>Academic project notice:</strong> MindCheck is built as a DBMS academic project. It is not a clinical tool and does not replace professional mental health evaluation. If you are experiencing distress, please consult a qualified mental health professional.
+    </div>
+  </section>
+ 
+  <!-- CTA STRIP -->
+  <section class="cta-strip">
+    <h2>Ready to check in with <em>yourself?</em></h2>
+    <p>It takes 3 minutes. No account needed. Your responses stay private.</p>
+    <a href="questionnaire.html" class="btn-primary btn-large">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+      Begin assessment
+    </a>
+  </section>
+ 
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">MindCheck</span>
+    <p>Built as a DBMS project &mdash; <a href="https://github.com/Dia-Garg/Mental_health_analyser" target="_blank">View on GitHub</a></p>
+    <p>Not a medical diagnostic tool &mdash; for academic use only</p>
+  </footer>
+ 
+  <script src="../static/js/main.js"></script>
+</body>
+</html>
