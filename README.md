@@ -1,13 +1,13 @@
 # 🧠 Mental Health Analyzer
 
-A DBMS-based system that evaluates user responses to mental health questions, calculates a score, and classifies mental health status using predefined reference data.
+A DBMS-based web application that evaluates user responses to mental health questions, calculates a score, and classifies mental health status using predefined reference data.
 
 ---
 
 ## 🚀 Features
-- 10-question assessment system  
-- Automatic score calculation using SQL Trigger  
-- Mental health classification using score ranges  
+- Interactive frontend for user input (10-question assessment)
+- Automatic score calculation using SQL Trigger
+- Mental health classification using score ranges
 - Demonstrates core DBMS concepts:
   - Constraints, Aggregate Functions, Set Operations  
   - Joins, Subqueries, Views  
@@ -16,36 +16,36 @@ A DBMS-based system that evaluates user responses to mental health questions, ca
 ---
 
 ## 🛠️ Tech Stack
-- Frontend: HTML, CSS, JavaScript  
-- Backend: Python (Flask - in progress)  
-- Database: MySQL  
+- **Frontend:** HTML, CSS, JavaScript  
+- **Backend:** Python (Flask - in progress)  
+- **Database:** MySQL  
 
 ---
 
-## 📂 Structure
+## 📂 Project Structure
 
 mental-health-dbms/
 ├── src/ # Backend (Python)
-├── templates/ # HTML files
+├── templates/ # HTML (Frontend pages)
 ├── static/ # CSS / JS
-├── database/ # SQL scripts
+├── database/ # SQL scripts (schema, queries, triggers)
 ├── docs/ # Report
-├── results/ # Outputs
+├── results/ # Query outputs & screenshots
 
 
 ---
 
 ## ⚙️ How to Run
-1. Run `schema.sql` and `insert_data.sql` in MySQL  
-2. Execute queries from `database/queries/`  
-3. Open `index.html` in browser  
+
+### 1. Setup Database
+- Run `schema.sql`
+- Run `insert_data.sql`
+
+### 2. Run Frontend
+- Open `index.html` in browser  
+- Fill user details and answer questions  
+
+### 3. (In Progress)
+- Backend integration using Flask to connect frontend with database
 
 ---
-
-## 📊 Workflow
-User → Answers Questions → Data Stored → Trigger Calculates Score → Result Classified
-
----
-
-## ⚠️ Note
-For academic use only. Not a medical diagnosis tool.
