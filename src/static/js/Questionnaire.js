@@ -180,7 +180,36 @@ function submitQuiz() {
     answers:     answers
   }));
 
-  window.location.href = 'result.html';
+  // Create a form dynamically and send to Flask
+const form = document.createElement('form');
+form.method = 'POST';
+form.action = '/submit';
+
+// Add name + email
+const nameInput = document.createElement('input');
+nameInput.type = 'hidden';
+nameInput.name = 'user_name';
+nameInput.value = name;
+form.appendChild(nameInput);
+
+const emailInput = document.createElement('input');
+emailInput.type = 'hidden';
+emailInput.name = 'user_email';
+emailInput.value = email;
+form.appendChild(emailInput);
+
+// Add all answers
+answers.forEach((score, index) => {
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = `q${index + 1}`;
+  input.value = score;
+  form.appendChild(input);
+});
+
+// Submit form
+document.body.appendChild(form);
+form.submit();
 }
 
 // ─── INIT: show step-0 on load ───

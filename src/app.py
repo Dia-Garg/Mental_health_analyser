@@ -28,16 +28,24 @@ def submit():
     print("FORM DATA:", request.form)
     name = request.form['user_name']
     email = request.form['user_email']
+    if not name or not email:
+        return "Invalid input", 400
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Insert user
-    cursor.execute(
+    try:
+        cursor.execute(
         "INSERT INTO users (user_name, user_email) VALUES (%s, %s)",
         (name, email)
-    )
-    user_id = cursor.lastrowid
+        )
+        user_id = cursor.lastrowid
+    except:
+        cursor.execute(
+        "SELECT user_id FROM users WHERE user_email = %s",
+        (email,)
+        )
+    user_id = cursor.fetchone()[0]
 
     # Create assessment
     cursor.execute(
@@ -68,7 +76,11 @@ def submit():
         WHERE %s BETWEEN score_range_min AND score_range_max
     """, (total_score,))
     
-    result = cursor.fetchone()[0]
+    row = cursor.fetchone()
+    if row:
+        result = row[0]
+    else:
+        result = "No category found"
 
     conn.close()
 
@@ -104,7 +116,7 @@ def test():
             "INSERT INTO responses (assessment_id, question_id, score) VALUES (%s, %s, %s)",
             (assessment_id, i, score)
         )
-
+        
     # update total score
     cursor.execute(
         "UPDATE assessments SET total_score = %s WHERE assessment_id = %s",

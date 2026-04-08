@@ -7,33 +7,77 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/style.css" />
 </head>
 <body>
 
   <!-- NAV -->
   <nav id="navbar">
-    <a href="index.html" class="nav-logo">
+    <a href="/" class="nav-logo">
       <span class="dot"></span>MindCheck
     </a>
     <ul class="nav-links">
-      <li><a href="index.html">← Back to home</a></li>
+      <li><a href="/">← Back to home</a></li>
     </ul>
   </nav>
 
   <!-- RESULT -->
   <main class="result-page">
 
-    <div id="result-content">
-      <!-- Filled by result.js -->
+    <div class="result-card">
+  <p class="result-name">Hi, {{ request.form.user_name if request.form.user_name else '' }}</p>
+  <h2 class="result-category">{{ result }}</h2>
+
+  <div class="result-score-bar-wrap">
+    <div class="result-score-bar">
+      <div class="result-score-fill" style="width: {{ (score / 200) * 100 }}%"></div>
     </div>
+    <span class="result-score-label">Score: {{ score }} / 200</span>
+  </div>
+</div>
+
+  <div class="result-details">
+  <h3>Score Interpretation</h3>
+
+  <table style="width:100%; border-collapse: collapse; margin-top: 1rem;">
+    <thead>
+      <tr style="background-color: #F5EDE0;">
+        <th style="padding: 10px; border: 1px solid #E8D9C5;">Score Range</th>
+        <th style="padding: 10px; border: 1px solid #E8D9C5;">Category</th>
+        <th style="padding: 10px; border: 1px solid #E8D9C5;">Severity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #E8D9C5;">10 – 60</td>
+        <td style="padding: 10px; border: 1px solid #E8D9C5;">Stable</td>
+        <td style="padding: 10px; border: 1px solid #E8D9C5;">Low</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #E8D9C5;">61 – 110</td>
+        <td style="padding: 10px; border: 1px solid #E8D9C5;">Mild Stress</td>
+        <td style="padding: 10px; border: 1px solid #E8D9C5;">Moderate</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #E8D9C5;">111 – 150</td>
+        <td style="padding: 10px; border: 1px solid #E8D9C5;">Moderate Distress</td>
+        <td style="padding: 10px; border: 1px solid #E8D9C5;">High</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #E8D9C5;">151 – 200</td>
+        <td style="padding: 10px; border: 1px solid #E8D9C5;">Severe Distress</td>
+        <td style="padding: 10px; border: 1px solid #E8D9C5;">Critical</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
     <div class="result-actions">
-      <a href="questionnaire.html" class="btn-primary">
+      <a href="/questions" class="btn-primary">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
         Take it again
       </a>
-      <a href="index.html" class="btn-ghost">Back to home</a>
+      <a href="/" class="btn-ghost">Back to home</a>
     </div>
 
     <div class="disclaimer" style="margin-top: 2rem;">
@@ -49,7 +93,6 @@
     <p>Not a medical diagnostic tool &mdash; for academic use only</p>
   </footer>
 
-  <script src="../static/js/main.js"></script>
-  <script src="../static/js/result.js"></script>
+  <script src="/static/js/main.js"></script>
 </body>
 </html>
