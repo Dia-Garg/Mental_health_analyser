@@ -1,3 +1,4 @@
+
 /* ─────────────────────────────────────────
    MindCheck — Main JavaScript
    main.js  (shared across all pages)

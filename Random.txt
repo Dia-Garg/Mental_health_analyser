@@ -1,0 +1,6229 @@
+
+I am planning to make a project of DBMS, regarding the topic of Mental Health, In the project, in the frontend the user would be asked 10 questions regarding their mental health, and then according to the inputs or the options selected by the user scores will be provided from 1 - 5. And then in the backend we will be having 2 datasets  :-
+1) One will be having the records entered by the user in the website create by us.
+2) Another will be having the pre made dataset from the internet of random combinations of those questions. Which will be relating to the scores. 
+
+And then according to the score the 2nd dataset will be searched, analyzed and then the final combination will be selected and the Mental Health matching with that combo will be shown as an output to the user.
+
+I don't know anything. How to do or what to do. I don't even know how and where to start. I will be following your instructions only.
+For our review one we need to create a ER diagram and also map the er diagram to the table. 
+I also need to show the database and I'm planning to finish dataset 2 before going for my review 1.
+
+Good. The idea is workable. But right now it’s vague and academically weak. If you present it like this, your faculty will tear it apart.
+
+Let’s fix it properly and make it bulletproof.
+
+1️⃣ First Reality Check – What You’re Actually Building
+You are NOT building AI.
+You are building:
+
+A questionnaire system
+
+A scoring system
+
+A pattern-matching database lookup
+
+A result classification system
+
+That’s a DBMS project. Keep it that way. Don’t oversell it as ML.
+
+2️⃣ Before Touching Code – Clarify the Logic
+You said:
+
+10 questions → score 1–5 → search dataset 2 → show mental health result
+
+This is too unclear.
+
+You must decide ONE of these two models:
+
+Model A (Recommended – Simpler & Stronger)
+Each question has weight.
+
+User answers (1–5 scale).
+
+You calculate:
+
+total_score = sum of all 10 answers
+Based on score range:
+
+Score Range	Mental State
+10–20	Stable
+21–35	Mild Stress
+36–45	High Stress
+46–50	Critical
+This is clean, defendable, easy to explain in viva.
+
+Model B (Your Combo Matching Idea – Risky but Interesting)
+Store combinations like:
+
+Q1=5, Q2=4, Q3=1... → Anxiety
+Q1=1, Q2=2, Q3=1... → Normal
+Then match exact pattern.
+
+Problem:
+
+5^10 = 9,765,625 combinations.
+
+You cannot realistically store all.
+
+So if you want combo matching, you must:
+
+Either use only ranges
+
+Or categorize per dimension (Depression, Anxiety, Stress)
+
+Otherwise your logic will collapse in review.
+
+3️⃣ Stronger Academic Version (What I Recommend)
+Instead of raw combo matching, do this:
+
+Each question belongs to a category:
+
+3 Depression questions
+
+3 Anxiety questions
+
+4 Stress questions
+
+Then:
+
+Depression Score = sum of its 3 questions
+Anxiety Score = sum of its 3 questions
+Stress Score = sum of its 4 questions
+Then classify each separately.
+
+This looks intelligent.
+This looks structured.
+This looks like a real system.
+
+4️⃣ Now Let’s Design the Database Properly (For ER Diagram)
+You need strong entities.
+
+Core Entities:
+1️⃣ User
+user_id (PK)
+
+name
+
+email
+
+age
+
+gender
+
+2️⃣ Question
+question_id (PK)
+
+question_text
+
+category (Depression/Anxiety/Stress)
+
+3️⃣ Response
+response_id (PK)
+
+user_id (FK)
+
+question_id (FK)
+
+score (1–5)
+
+This stores Dataset 1 (user entries).
+
+4️⃣ Mental_Health_Category
+category_id (PK)
+
+category_name (Depression/Anxiety/Stress)
+
+5️⃣ Score_Range
+range_id (PK)
+
+category_id (FK)
+
+min_score
+
+max_score
+
+interpretation (e.g., Mild, Severe)
+
+This replaces your Dataset 2.
+Much cleaner.
+Much more scalable.
+
+5️⃣ ER Diagram Relationships
+User 1 —— N Response
+
+Question 1 —— N Response
+
+Question N —— 1 Category
+
+Category 1 —— N Score_Range
+
+That’s your ER structure.
+
+Clean.
+Simple.
+Presentable.
+
+6️⃣ Mapping ER to Tables (You Need This for Review 1)
+User(user_id PK, name, email, age, gender)
+
+Category(category_id PK, category_name)
+
+Question(question_id PK, question_text, category_id FK)
+
+Response(response_id PK, user_id FK, question_id FK, score)
+
+Score_Range(range_id PK, category_id FK, min_score, max_score, interpretation)
+
+Done.
+
+7️⃣ What is Dataset 2 Now?
+Instead of random combinations from internet, dataset 2 becomes:
+
+Predefined score ranges like:
+
+For Depression:
+
+3–6 → Normal
+
+7–10 → Mild
+
+11–15 → Severe
+
+You can manually define these.
+No need internet.
+And this makes your project academically strong.
+
+8️⃣ What You Should Do RIGHT NOW
+Step 1: Finalize 10 questions
+Step 2: Assign each to category
+Step 3: Define score ranges
+Step 4: Draw ER diagram
+Step 5: Convert to relational schema
+
+Do NOT start frontend yet.
+That’s where students mess up.
+
+9️⃣ Tech Stack (Keep It Simple)
+If you don’t know anything:
+
+Frontend: HTML + basic CSS
+
+Backend: Python (Flask) OR PHP
+
+Database: MySQL
+
+Don’t try React.
+Don’t try ML.
+Don’t complicate.
+
+10️⃣ Important Ethical Point (Very Important)
+You MUST add:
+
+“This system is not a medical diagnostic tool. It is only for academic purposes.”
+
+Otherwise faculty may question ethics.
+
+11️⃣ Now I’m Going to Stress Test You
+Answer me clearly:
+
+Are you building simple total score classification OR category-based scoring?
+
+Are you working alone or in a team?
+
+Which language are you comfortable with? (Python / Java / PHP / None)
+
+No vague answers.
+
+We’re going to build this step by step like engineers, not like confused students.
+
+
+I am going with model A
+According to model A give me the points from 4 to 9
+We will be using SQL and python connectivity
+
+Good. Model A is clean, defendable, and scalable. Now we structure it properly so your review doesn’t destroy you.
+
+You asked for points 4 to 9 based on Model A. Here they are — properly engineered.
+
+4️⃣ Database Design (Entities for ER Diagram)
+Since you're using total score classification, your database must reflect that logic.
+
+Entity 1: User
+Stores basic details of the person taking the test.
+
+Attributes:
+
+user_id (Primary Key)
+
+name
+
+email
+
+age
+
+gender
+
+test_date
+
+Entity 2: Question
+Stores the 10 mental health questions.
+
+Attributes:
+
+question_id (Primary Key)
+
+question_text
+
+Entity 3: Response
+Stores each answer given by user.
+
+Attributes:
+
+response_id (Primary Key)
+
+user_id (Foreign Key → User)
+
+question_id (Foreign Key → Question)
+
+score (1–5)
+
+This table is your Dataset 1.
+
+Entity 4: Score_Category
+Stores predefined score ranges and mental state labels.
+
+Attributes:
+
+category_id (Primary Key)
+
+min_score
+
+max_score
+
+mental_state
+
+description
+
+This table is your Dataset 2.
+
+5️⃣ ER Diagram Relationships
+Relationships:
+
+One User can have many Responses
+(User 1 — N Response)
+
+One Question can appear in many Responses
+(Question 1 — N Response)
+
+Score_Category is independent
+It is used only for lookup after total score calculation.
+
+So your ER connections:
+
+User → Response ← Question
+Score_Category (standalone lookup table)
+
+This is clean and strong for review.
+
+6️⃣ Mapping ER Diagram to Relational Schema
+Now convert to tables.
+
+User Table
+User(
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    age INT,
+    gender VARCHAR(10),
+    test_date DATE
+)
+Question Table
+Question(
+    question_id INT PRIMARY KEY AUTO_INCREMENT,
+    question_text TEXT
+)
+Response Table
+Response(
+    response_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    question_id INT,
+    score INT CHECK(score BETWEEN 1 AND 5),
+    FOREIGN KEY (user_id) REFERENCES User(user_id),
+    FOREIGN KEY (question_id) REFERENCES Question(question_id)
+)
+Score_Category Table
+Score_Category(
+    category_id INT PRIMARY KEY AUTO_INCREMENT,
+    min_score INT,
+    max_score INT,
+    mental_state VARCHAR(50),
+    description TEXT
+)
+7️⃣ What Exactly is Dataset 2 Now?
+Dataset 2 = Predefined score classification.
+
+Example entries:
+
+min_score	max_score	mental_state
+10	20	Stable
+21	30	Mild Stress
+31	40	Moderate Stress
+41	50	High Stress
+Total score range:
+
+Minimum = 10 (1×10)
+
+Maximum = 50 (5×10)
+
+You will manually insert these into Score_Category table.
+
+That’s your second dataset.
+
+No internet random combos nonsense.
+
+8️⃣ Project Execution Flow (Backend Logic in Python)
+This is how your system will work:
+
+Step 1: User fills 10 questions (1–5 each)
+Step 2: Insert user details into User table
+Step 3: Insert 10 records into Response table
+Step 4: Calculate total score:
+
+SELECT SUM(score) 
+FROM Response 
+WHERE user_id = ?
+Step 5: Find mental state:
+
+SELECT mental_state, description
+FROM Score_Category
+WHERE total_score BETWEEN min_score AND max_score;
+Step 6: Display result
+
+That’s it. Clean logic. Fully DBMS based.
+
+9️⃣ Tech Architecture (SQL + Python Connectivity)
+You will need:
+
+MySQL database
+
+Python
+
+mysql-connector-python library
+
+Install:
+
+pip install mysql-connector-python
+Basic connection template:
+
+import mysql.connector
+
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="yourpassword",
+    database="mental_health_db"
+)
+
+cursor = conn.cursor()
+You use Python to:
+
+Insert user
+
+Insert responses
+
+Calculate total
+
+Fetch category
+
+Database does storage.
+Python does control logic.
+
+⚠️ Now I’m Going to Be Ruthless
+If you walk into review and say:
+
+"We will analyze dataset 2 and match combinations"
+
+They will ask:
+
+How many combinations?
+
+What algorithm?
+
+Why DBMS project and not ML?
+
+You will freeze.
+
+But if you say:
+
+"We classify total score using predefined relational score ranges stored in a lookup table"
+
+You sound structured.
+You sound database-focused.
+You survive.
+
+Next Step
+Now you will do this:
+
+Write 10 proper mental health questions.
+
+Define 4 score ranges.
+
+Tell me whether this will be CLI-based or Web-based.
+
+Don’t move ahead randomly. We build this like engineers.
+
+
+I want to make 2 datasets 
+That means I want to create 1 database with 2 tables inside it 
+Table 1 will be the pre defined data and table 2 will be what we take from user 
+
+According to this I want the points that u gave
+
+Good. Now we simplify and align exactly with what you want:
+
+One database
+
+Table 1 → Predefined dataset (score classification)
+
+Table 2 → User dataset (answers + total score)
+
+No unnecessary extra tables. Clean. Review-safe.
+
+Now I’ll give you points 4 to 9 again — but strictly according to your 2-table design.
+
+4️⃣ Database Design (ER Model Based on 2 Tables)
+Since you want only two tables, your entities are:
+
+Entity 1: Predefined_Result
+(This is Dataset 1 – Predefined Data)
+
+Attributes:
+
+category_id (Primary Key)
+
+min_score
+
+max_score
+
+mental_state
+
+description
+
+This stores classification logic.
+
+Entity 2: User_Test
+(This is Dataset 2 – User Data)
+
+Attributes:
+
+test_id (Primary Key)
+
+name
+
+age
+
+gender
+
+q1
+
+q2
+
+q3
+
+q4
+
+q5
+
+q6
+
+q7
+
+q8
+
+q9
+
+q10
+
+total_score
+
+result_category (optional, can store mental_state after calculation)
+
+You are storing all 10 answers directly inside this table.
+
+This keeps it strictly 2 tables.
+
+5️⃣ ER Diagram Structure
+Relationship:
+
+Predefined_Result ← User_Test
+
+Logical relationship:
+
+User_Test.total_score is compared with
+
+Predefined_Result.min_score and max_score
+
+It’s not a traditional foreign key relationship.
+It is a logical lookup relationship.
+
+So in ER diagram:
+
+Two entities
+
+One comparison-based association
+
+This is acceptable in DBMS review if explained clearly.
+
+6️⃣ Mapping ER Diagram to Tables (Relational Schema)
+Table 1: Predefined_Result
+Predefined_Result(
+    category_id INT PRIMARY KEY AUTO_INCREMENT,
+    min_score INT NOT NULL,
+    max_score INT NOT NULL,
+    mental_state VARCHAR(50) NOT NULL,
+    description TEXT
+)
+Table 2: User_Test
+User_Test(
+    test_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    age INT,
+    gender VARCHAR(10),
+    q1 INT CHECK(q1 BETWEEN 1 AND 5),
+    q2 INT CHECK(q2 BETWEEN 1 AND 5),
+    q3 INT CHECK(q3 BETWEEN 1 AND 5),
+    q4 INT CHECK(q4 BETWEEN 1 AND 5),
+    q5 INT CHECK(q5 BETWEEN 1 AND 5),
+    q6 INT CHECK(q6 BETWEEN 1 AND 5),
+    q7 INT CHECK(q7 BETWEEN 1 AND 5),
+    q8 INT CHECK(q8 BETWEEN 1 AND 5),
+    q9 INT CHECK(q9 BETWEEN 1 AND 5),
+    q10 INT CHECK(q10 BETWEEN 1 AND 5),
+    total_score INT,
+    result_category VARCHAR(50)
+)
+Minimum total_score = 10
+Maximum total_score = 50
+
+7️⃣ What Exactly Is Dataset 1 (Predefined Table)?
+Example data you will insert manually:
+
+category_id	min_score	max_score	mental_state
+1	10	20	Stable
+2	21	30	Mild Stress
+3	31	40	Moderate Stress
+4	41	50	Severe Stress
+This table never changes.
+It is static classification logic.
+
+8️⃣ Backend Flow Using Python + SQL
+System flow:
+
+Step 1: User enters 10 answers
+Step 2: Python calculates:
+
+total_score = q1 + q2 + ... + q10
+Step 3: Insert full record into User_Test
+
+Step 4: Find result:
+
+SELECT mental_state, description
+FROM Predefined_Result
+WHERE total_score BETWEEN min_score AND max_score;
+Step 5: Display result to user
+Step 6: Optionally update result_category column
+
+UPDATE User_Test
+SET result_category = 'Mild Stress'
+WHERE test_id = ?
+That’s the entire logic.
+
+Simple.
+Database-centered.
+Review safe.
+
+9️⃣ Tech Stack Structure
+Database: MySQL
+Backend: Python
+Connector: mysql-connector-python
+
+Architecture:
+
+User → Python → MySQL
+MySQL → Python → Result → User
+
+Database handles:
+
+Storage
+
+Lookup
+
+Range matching
+
+Python handles:
+
+Input
+
+Calculation
+
+Query execution
+
+⚠️ Now Let Me Stress Test This Design
+Pros:
+
+Very simple
+
+Only 2 tables
+
+Easy to explain
+
+Easy to implement
+
+Cons (be ready in viva):
+
+Not normalized (10 questions stored as columns)
+
+Not scalable (if questions increase to 20, structure changes)
+
+Not ideal database design academically
+
+If examiner asks:
+“Why didn’t you normalize?”
+
+You answer:
+
+Since the number of questions is fixed (10), and the goal was simplicity and clarity for demonstration, we used a denormalized structure for efficient retrieval.
+
+That’s how you defend it.
+
+Now Next Step
+Tell me:
+
+Do you want this as CLI (terminal-based) or Web-based?
+
+Do you want me to give full SQL creation script next?
+
+Do you want Python code skeleton next?
+
+We move step-by-step. No confusion.
+
+
+Give me the sample inputs for the following tables
+DDL Commands:-
+CREATE DATABASE mental_health_tracker;
+USE mental_health_tracker;
+CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_name VARCHAR(100) NOT NULL,
+    user_email VARCHAR(100) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE questions (
+    question_id INT PRIMARY KEY AUTO_INCREMENT,
+    question_text TEXT NOT NULL,
+    max_score INT DEFAULT 20
+);
+CREATE TABLE assessments (
+    assessment_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total_score INT,
+    
+    FOREIGN KEY (user_id)
+    REFERENCES users(user_id)
+    ON DELETE CASCADE
+);
+CREATE TABLE responses (
+    response_id INT PRIMARY KEY AUTO_INCREMENT,
+    assessment_id INT NOT NULL,
+    question_id INT NOT NULL,
+    score INT CHECK (score BETWEEN 1 AND 20),
+    
+    FOREIGN KEY (assessment_id)
+    REFERENCES assessments(assessment_id)
+    ON DELETE CASCADE,
+    
+    FOREIGN KEY (question_id)
+    REFERENCES questions(question_id)
+    ON DELETE CASCADE
+);
+CREATE TABLE mental_health_reference (
+    ref_id INT PRIMARY KEY AUTO_INCREMENT,
+    score_range_min INT NOT NULL,
+    score_range_max INT NOT NULL,
+    status_category VARCHAR(100) NOT NULL,
+    status_description TEXT,
+    recommendations TEXT,
+    severity_level VARCHAR(50),
+    
+    CHECK (score_range_min <= score_range_max)
+);
+
+SHOW TABLES;
+
+Good. This structure is actually much stronger than your earlier 2-table idea. This is normalized and review-safe.
+
+Now I’ll give you clean sample INSERT data for each table in the correct order (respecting foreign keys).
+
+You must insert in this order:
+
+mental_health_reference
+
+questions
+
+users
+
+assessments
+
+responses
+
+🔹 1️⃣ Insert Sample Data – mental_health_reference (Dataset 2)
+Since:
+
+10 questions
+
+Each question max_score = 20
+
+Total maximum = 200
+
+Minimum = 10
+
+So ranges must be between 10–200.
+
+INSERT INTO mental_health_reference 
+(score_range_min, score_range_max, status_category, status_description, recommendations, severity_level)
+VALUES
+(10, 60, 'Stable', 
+ 'You show minimal signs of stress or emotional distress.', 
+ 'Maintain healthy routines, exercise regularly, and continue positive habits.', 
+ 'Low'),
+
+(61, 110, 'Mild Stress', 
+ 'You may be experiencing mild stress or emotional imbalance.', 
+ 'Practice mindfulness, improve sleep cycle, and monitor emotional changes.', 
+ 'Moderate'),
+
+(111, 150, 'Moderate Distress', 
+ 'Signs of noticeable stress and emotional strain are present.', 
+ 'Consider stress management techniques and talk to a trusted person.', 
+ 'High'),
+
+(151, 200, 'Severe Distress', 
+ 'High levels of stress detected. Immediate attention recommended.', 
+ 'Consult a mental health professional for proper evaluation.', 
+ 'Critical');
+🔹 2️⃣ Insert Sample Data – questions
+10 mental health related questions (scored 1–20)
+
+INSERT INTO questions (question_text) VALUES
+('How often do you feel overwhelmed by daily responsibilities?'),
+('How frequently do you experience difficulty sleeping due to stress?'),
+('How often do you feel anxious without a clear reason?'),
+('How frequently do you feel emotionally exhausted?'),
+('How often do you lose interest in activities you previously enjoyed?'),
+('How often do you feel irritable or frustrated?'),
+('How frequently do you find it hard to concentrate?'),
+('How often do you feel hopeless about the future?'),
+('How frequently do you experience mood swings?'),
+('How often do you feel socially withdrawn?');
+🔹 3️⃣ Insert Sample Data – users
+INSERT INTO users (user_name, user_email) VALUES
+('Rahul Sharma', 'rahul@example.com'),
+('Ananya Iyer', 'ananya@example.com');
+🔹 4️⃣ Insert Sample Data – assessments
+Assume:
+
+Rahul → user_id = 1
+
+Ananya → user_id = 2
+
+We leave total_score NULL initially (Python will calculate).
+
+INSERT INTO assessments (user_id, total_score) VALUES
+(1, 135),
+(2, 72);
+🔹 5️⃣ Insert Sample Data – responses
+Now insert responses for each assessment.
+
+Assume:
+
+Rahul → assessment_id = 1
+
+Ananya → assessment_id = 2
+
+Rahul’s Responses (Higher scores → Moderate/Severe)
+INSERT INTO responses (assessment_id, question_id, score) VALUES
+(1,1,15),(1,2,14),(1,3,13),(1,4,16),(1,5,12),
+(1,6,14),(1,7,13),(1,8,15),(1,9,11),(1,10,12);
+Total = 135 → Falls in 111–150 → Moderate Distress
+
+Ananya’s Responses (Lower scores → Mild)
+INSERT INTO responses (assessment_id, question_id, score) VALUES
+(2,1,7),(2,2,8),(2,3,6),(2,4,9),(2,5,5),
+(2,6,8),(2,7,7),(2,8,6),(2,9,8),(2,10,8);
+Total = 72 → Falls in 61–110 → Mild Stress
+
+🔹 6️⃣ Test Your Lookup Query
+To check result classification:
+
+SELECT m.status_category, m.severity_level
+FROM mental_health_reference m
+JOIN assessments a
+ON a.total_score BETWEEN m.score_range_min AND m.score_range_max
+WHERE a.assessment_id = 1;
+This should return:
+Moderate Distress
+
+🔥 What This Shows in Review
+You can demonstrate:
+
+Proper normalization
+
+Foreign key relationships
+
+Range-based classification
+
+Dataset 1 (user data)
+
+Dataset 2 (reference classification)
+
+Cascading delete
+
+CHECK constraint
+
+Auto timestamps
+
+This is not a basic project anymore.
+This looks engineered.
+
+If you want next:
+
+I can give you sample Python connectivity code
+
+Or give you full execution flow script
+
+Or help you prepare viva answers
+
+Tell me your next move.
+
+
+Can u create a single ER diagram for this 
+
+Generated image: Mental health assessment database diagram
+
+
+Edit
+
+
+Uploaded image
+Prepare me for viva, it is on the basics of dbms, mostly about the er diagram and the problem statement and how our project is different from other sources available
+
+Good. Now forget fear. We’re going to make you dangerous in viva.
+
+I’ll prepare you in 3 parts:
+
+1️⃣ Problem Statement Defense
+2️⃣ ER Diagram Deep Understanding
+3️⃣ “How is your project different?”
+
+If you understand this properly, no basic DBMS question will shake you.
+
+🔹 1️⃣ PROBLEM STATEMENT – What You Must Say Clearly
+If examiner asks:
+
+👉 “Explain your project.”
+
+You say confidently:
+
+Our project is a Mental Health Assessment Management System. It allows users to take a structured questionnaire. Their responses are stored in a relational database, the total score is computed, and based on predefined score ranges stored in a reference table, the system classifies the user’s mental health status.
+
+Now break it technically:
+
+The system captures structured questionnaire data.
+
+Ensures data integrity using constraints.
+
+Maintains relationships using foreign keys.
+
+Uses range-based classification stored as a reference dataset.
+
+Follows normalization principles.
+
+This makes it a DBMS-focused system, not just a form.
+
+🔹 2️⃣ ER DIAGRAM – You MUST Understand Every Relationship
+Let’s dissect your diagram brutally.
+
+🟢 Entities
+USER
+
+ASSESSMENT
+
+QUESTION
+
+RESPONSE
+
+MENTAL_HEALTH_REFERENCE
+
+🟢 Primary Keys (Why Important?)
+Examiner might ask:
+
+👉 “Why do we need primary keys?”
+
+Answer:
+
+To uniquely identify each record.
+
+To avoid duplication.
+
+To enforce entity integrity.
+
+Examples:
+
+user_id uniquely identifies a user.
+
+assessment_id uniquely identifies a test attempt.
+
+🟢 Relationship 1: USER — Conducts — ASSESSMENT
+Cardinality:
+One user can conduct many assessments.
+One assessment belongs to exactly one user.
+
+This is:
+1 : N
+
+If they ask why:
+
+Because:
+
+A user may take the test multiple times.
+
+But one assessment cannot belong to multiple users.
+
+🟢 Relationship 2: ASSESSMENT — Comprises — RESPONSE
+One assessment contains multiple responses.
+
+Why?
+
+Because:
+
+One test has 10 questions.
+
+Each question produces one response.
+
+Cardinality:
+1 : N
+
+🟢 Relationship 3: QUESTION — Generates — RESPONSE
+One question can appear in many responses.
+
+Example:
+Question 1 is answered by many users.
+
+Cardinality:
+1 : N
+
+This forms a many-to-many resolution:
+
+Assessment and Question are many-to-many.
+We break it using RESPONSE table.
+
+If examiner asks:
+
+👉 “Why do we need the Response table?”
+
+Answer:
+
+Because Assessment and Question have a many-to-many relationship.
+A response acts as a junction (associative) entity to resolve that relationship.
+
+That’s a strong DBMS answer.
+
+🟢 Relationship 4: RESPONSE — References — MENTAL_HEALTH_REFERENCE
+Actually, logically:
+
+The total_score of assessment is compared with score ranges.
+
+Important correction:
+
+In pure ER logic, the reference is linked to ASSESSMENT (not individual response).
+
+If examiner questions this:
+
+You say:
+
+The mental health reference classification is determined based on total_score of an assessment using range comparison.
+
+That shows conceptual clarity.
+
+🔹 3️⃣ Normalization Questions They Might Ask
+👉 “Is your database normalized?”
+
+Answer:
+
+Yes.
+
+No repeating groups.
+
+Atomic attributes (1NF).
+
+No partial dependency (2NF).
+
+No transitive dependency (3NF).
+
+Example:
+We separated:
+
+Users
+
+Questions
+
+Responses
+
+Assessments
+
+Instead of storing everything in one table.
+
+If they ask:
+
+👉 “What would happen if you stored q1 to q10 inside assessment table?”
+
+Answer:
+
+That would violate normalization principles and reduce scalability.
+
+🔹 4️⃣ Constraints – They LOVE Asking This
+You have:
+
+✔ PRIMARY KEY
+✔ FOREIGN KEY
+✔ UNIQUE
+✔ CHECK
+✔ NOT NULL
+✔ DEFAULT TIMESTAMP
+
+If asked:
+
+👉 “Why ON DELETE CASCADE?”
+
+Answer:
+
+If a user is deleted, their assessments and responses must also be deleted to maintain referential integrity.
+
+That’s a strong integrity argument.
+
+🔹 5️⃣ What Makes Your Project Different?
+This is where most students fail.
+
+Do NOT say:
+“Many websites do this.”
+
+Say this:
+
+Our system uses a structured relational database rather than flat file storage.
+
+It separates transactional data (responses) from reference data (classification).
+
+It enforces referential integrity using foreign keys.
+
+It supports multiple assessments per user.
+
+It uses range-based classification stored dynamically in database (can be modified without changing code).
+
+That last point is powerful.
+
+If examiner asks:
+
+👉 “How is it better than online quizzes?”
+
+Answer:
+
+Online quizzes:
+
+Often don’t store structured relational data.
+
+Don’t maintain normalized schema.
+
+Don’t separate reference classification logic in a dedicated table.
+
+Don’t allow historical tracking of multiple assessments.
+
+Your system does.
+
+That’s your differentiation.
+
+🔹 6️⃣ Possible Viva Rapid-Fire Questions
+Prepare for these:
+
+What is DBMS?
+Difference between DBMS and RDBMS?
+What is cardinality?
+What is participation constraint?
+What is normalization?
+What is a weak entity?
+What is referential integrity?
+What is entity integrity?
+Difference between DELETE and TRUNCATE?
+What is indexing?
+
+If you want, I can grill you with mock viva questions.
+
+🔥 Now I’ll Stress Test You
+Answer these:
+
+Why is Response considered an associative entity?
+
+What normal form is your database in?
+
+Why didn’t you store total_score inside response table?
+
+Answer clearly. No vague statements.
+
+We’re making you viva-proof.
+
+
+Why did we take this problem system
+What is cardinality 
+What is primary key
+Why did u take time stamps 
+What is unique key 
+What is Multiple key
+
+Good. These are exactly the kind of basic questions they’ll throw at you. I’ll give you tight, viva-ready answers — not textbook garbage.
+
+1️⃣ Why did we choose this problem statement?
+Say this confidently:
+
+We chose this system to demonstrate how a structured questionnaire-based application can be implemented using a relational database with proper normalization, referential integrity, and classification logic using stored reference data.
+
+Now the deeper reason (if they push you):
+
+It involves multiple entities
+
+It demonstrates 1:N relationships
+
+It resolves M:N relationship using associative entity
+
+It uses constraints
+
+It uses range-based querying
+
+It separates transactional data and reference data
+
+This makes it academically strong for DBMS concepts.
+
+Do NOT say:
+
+“Because mental health is important.”
+
+That’s social. Not technical.
+
+2️⃣ What is Cardinality?
+Definition (simple and sharp):
+
+Cardinality defines the number of instances of one entity that can be associated with instances of another entity.
+
+Examples from your project:
+
+One USER can conduct many ASSESSMENTS → 1:N
+
+One ASSESSMENT contains many RESPONSES → 1:N
+
+QUESTION and ASSESSMENT are many-to-many, resolved through RESPONSE
+
+If they ask types:
+
+One-to-One (1:1)
+
+One-to-Many (1:N)
+
+Many-to-Many (M:N)
+
+3️⃣ What is a Primary Key?
+Say:
+
+A primary key is an attribute that uniquely identifies each record in a table and does not allow NULL or duplicate values.
+
+Example:
+
+user_id uniquely identifies a user.
+
+assessment_id uniquely identifies a test attempt.
+
+Why important?
+
+Ensures entity integrity.
+
+Prevents duplicate records.
+
+Enables relationships via foreign keys.
+
+4️⃣ Why did we use Timestamps?
+Strong answer:
+
+We used timestamps to record when data was created or submitted, which helps in tracking user activity, maintaining historical records, and supporting audit requirements.
+
+In your system:
+
+created_at → when user registered
+
+submission_date → when assessment was taken
+
+This allows:
+
+Tracking multiple attempts
+
+Trend analysis in future expansion
+
+If they ask:
+“Is it mandatory?”
+No. But it improves real-world usability and data traceability.
+
+5️⃣ What is a Unique Key?
+Say:
+
+A unique key ensures that all values in a column are distinct, but unlike primary key, it can allow one NULL value (depending on DBMS).
+
+In your project:
+
+user_email is UNIQUE
+
+Why?
+Because two users cannot register with same email.
+
+Difference from primary key:
+
+Table can have only one primary key
+
+Can have multiple unique keys
+
+6️⃣ What is Multiple Key?
+Careful here. This term is often confused.
+
+They might mean:
+
+🔹 Composite Key (Most likely)
+Definition:
+
+A composite key is a primary key made up of two or more attributes that together uniquely identify a record.
+
+Example (in your project):
+
+In RESPONSE table, logically:
+(assessment_id, question_id)
+
+Together they uniquely identify one response per question per assessment.
+
+Even though you used response_id as primary key,
+(assessment_id + question_id) can act as a candidate composite key.
+
+If they instead mean:
+
+🔹 Candidate Keys
+Candidate keys are all possible attributes that can uniquely identify a record.
+
+Example in USERS:
+
+user_id
+
+user_email
+
+Both are candidate keys.
+But we selected user_id as primary key.
+
+🔥 Now I’ll Push You Harder
+If examiner asks:
+
+“Why didn’t you use email as primary key?”
+
+What will you say?
+
+Correct answer:
+
+Because:
+
+Email can change.
+
+It is long (inefficient for indexing).
+
+Integer keys improve performance and storage efficiency.
+
+If you can answer like this, you dominate viva.
+
+If you want, I can now:
+
+Conduct a rapid-fire mock viva
+
+Or explain normalization clearly
+
+Or explain associative entity in depth
+
+Your move.
+
+
+Uploaded image
+
+Report template(DBMS).docx.pdf
+PDF
+
+Mental_Health_Analyser.pdf
+PDF
+Review 1 is over. Now comes review 2. 
+Help me complete this. 
+
+Good. Now we stop treating this like an assignment and treat it like a system you have to defend under pressure.
+
+You already have Chapters 1 & 2 done.
+Review 2 is where most people collapse because they just “fill queries” without understanding.
+
+We’re going to build Chapter 3 + 5 properly, and I’ll give you ready-to-write + ready-to-defend content.
+
+🔥 FIRST — What Your Reviewer Actually Wants
+From your sheet:
+
+Week 4:
+Aggregate
+
+Constraints
+
+Set operations
+
+Week 5:
+Subqueries
+
+Joins
+
+Views
+
+Week 6:
+Functions
+
+Triggers
+
+Cursors
+
+Exception Handling
+
+👉 Translation:
+They want to see if you can USE your database, not just create it.
+
+✅ CHAPTER 3 — I’ll Fill This For You (Strong Version)
+🔹 3.1 Constraints-Based Query
+Question:
+Ensure that no invalid scores are inserted in the responses table.
+
+SQL:
+ALTER TABLE responses
+ADD CONSTRAINT chk_score CHECK (score BETWEEN 1 AND 20);
+Output:
+Constraint added successfully. Invalid inserts will fail.
+
+👉 If they ask WHY:
+
+Prevent invalid data
+
+Maintain data integrity
+
+🔹 3.2 Aggregate Function Query
+Question:
+Find the average score of all users.
+
+SQL:
+SELECT AVG(total_score) AS average_score
+FROM assessments;
+Output:
+Shows average mental health score.
+
+🔹 3.3 Set Operation
+Question:
+Find users who have taken assessments (INTERSECTION concept).
+
+SQL (MySQL workaround):
+SELECT user_id FROM assessments
+UNION
+SELECT user_id FROM users;
+👉 Be careful:
+MySQL doesn’t support INTERSECT directly. If asked, say:
+
+MySQL does not support INTERSECT, so UNION is used to demonstrate set behavior.
+
+🔹 3.4 Subquery
+Question:
+Find users whose total score is above average.
+
+SQL:
+SELECT user_id, total_score
+FROM assessments
+WHERE total_score > (
+    SELECT AVG(total_score) FROM assessments
+);
+👉 This is a classic viva question.
+
+🔹 3.5 Joins
+Question:
+Display user name with their total score.
+
+SQL:
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a
+ON u.user_id = a.user_id;
+👉 If they ask:
+“What type of join?”
+→ INNER JOIN
+
+🔹 3.6 Views
+Question:
+Create a view for user results.
+
+SQL:
+CREATE VIEW user_results AS
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a
+ON u.user_id = a.user_id;
+👉 Why views?
+
+Security
+
+Simplicity
+
+Reusability
+
+🔹 3.7 Trigger (IMPORTANT)
+Question:
+Automatically calculate total score after inserting responses.
+
+SQL:
+DELIMITER $$
+
+CREATE TRIGGER calculate_total_score
+AFTER INSERT ON responses
+FOR EACH ROW
+BEGIN
+    UPDATE assessments
+    SET total_score = (
+        SELECT SUM(score)
+        FROM responses
+        WHERE assessment_id = NEW.assessment_id
+    )
+    WHERE assessment_id = NEW.assessment_id;
+END$$
+
+DELIMITER ;
+👉 This is GOLD in viva.
+
+🔹 3.8 Cursor
+Question:
+Display all users and their scores using cursor.
+
+SQL:
+DELIMITER $$
+
+CREATE PROCEDURE get_user_scores()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE uname VARCHAR(100);
+    DECLARE score INT;
+
+    DECLARE cur CURSOR FOR 
+    SELECT u.user_name, a.total_score
+    FROM users u
+    JOIN assessments a ON u.user_id = a.user_id;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO uname, score;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+    END LOOP;
+
+    CLOSE cur;
+END$$
+
+DELIMITER ;
+👉 If they ask:
+“What is cursor?”
+→ Row-by-row processing mechanism.
+
+🔥 CHAPTER 5 — Transactions (VERY IMPORTANT)
+You NEED at least 5.
+
+🔹 Transaction 1 (Insert Assessment)
+START TRANSACTION;
+
+INSERT INTO assessments (user_id, total_score)
+VALUES (1, 120);
+
+COMMIT;
+🔹 Transaction 2 (Rollback Example)
+START TRANSACTION;
+
+UPDATE assessments
+SET total_score = 200
+WHERE assessment_id = 1;
+
+ROLLBACK;
+🔹 Transaction 3 (Savepoint)
+START TRANSACTION;
+
+UPDATE responses SET score = 15 WHERE response_id = 1;
+
+SAVEPOINT sp1;
+
+UPDATE responses SET score = 18 WHERE response_id = 2;
+
+ROLLBACK TO sp1;
+
+COMMIT;
+🔹 Transaction 4 (Delete with Cascade)
+START TRANSACTION;
+
+DELETE FROM users WHERE user_id = 1;
+
+COMMIT;
+👉 This triggers cascading delete.
+
+🔹 Transaction 5 (Multiple Updates)
+START TRANSACTION;
+
+UPDATE assessments SET total_score = total_score + 10 WHERE user_id = 2;
+
+COMMIT;
+🔥 CONCURRENCY CONTROL (You MUST SAY THIS)
+If asked:
+
+👉 “What is concurrency control?”
+
+Say:
+
+It ensures that multiple users can access the database simultaneously without causing inconsistency.
+
+Example:
+
+SELECT * FROM assessments WHERE assessment_id = 1 FOR UPDATE;
+🔥 FINAL STRATEGY (IMPORTANT)
+What makes you stand out:
+
+You don’t just show queries
+
+You explain WHY each query exists
+
+⚠️ Where You Can Still Get Destroyed
+If they ask:
+
+Difference between trigger and procedure
+
+Why cursor is inefficient
+
+Why normalization is needed
+
+And you don’t answer → you’re done.
+
+🔥 Next Step
+I’ll push you now.
+
+Answer:
+
+Why is trigger better than calculating score in Python?
+
+What is the disadvantage of cursor?
+
+What happens if foreign key is removed?
+
+No guessing. Think and answer.
+
+
+
+Review 2 Rubrics.pdf
+PDF
+
+21CSC205P LAB WORKBOOK.pdf
+PDF
+I have also attached our lab workbook. The functions given in this, can maybe get added. See, I don't know what we have to submit in review 2. 
+I am giving u all the information that I have. I think we need to update the report and maybe make a ppt to explain the topics and changes that we have made for review 2. They haven't told us to make a ppt. 
+
+Good—you gave enough context. Now I’ll cut through the confusion.
+
+You’re overthinking this. Review 2 is NOT about building new features.
+It’s about proving you can use DBMS concepts on your existing project.
+
+🔥 What You ACTUALLY Need to Submit for Review 2
+You need 2 things:
+
+✅ 1. Updated Report (MOST IMPORTANT)
+Add:
+
+➤ Chapter 3 – SQL Queries (Week 4–6 topics)
+This must include:
+
+Aggregate queries
+
+Constraints usage
+
+Set operations
+
+Joins
+
+Subqueries
+
+Views
+
+Trigger
+
+Cursor
+
+Function / Procedure
+
+Exception handling (basic mention is enough)
+
+👉 This is your MAIN evaluation.
+
+✅ 2. Demonstration (Live or Screenshots)
+You must SHOW:
+
+Tables created
+
+Data inserted
+
+Queries executed
+
+Output shown
+
+❌ PPT?
+They didn’t ask.
+
+So:
+
+Don’t waste time making fancy slides
+
+BUT keep a simple 5-slide backup just in case
+
+🔥 How to STRUCTURE Your Updated Report (Exact Format)
+Add this:
+
+CHAPTER 3 – SQL IMPLEMENTATION
+3.1 Aggregate Functions
+(Write 2–3 queries)
+
+3.2 Constraints
+(Explain CHECK, FK, etc.)
+
+3.3 Set Operations
+(Explain limitation in MySQL)
+
+3.4 Joins
+(At least 2 joins)
+
+3.5 Subqueries
+(At least 2)
+
+3.6 Views
+(Create + explain)
+
+3.7 Triggers
+(Your total score trigger = highlight this)
+
+3.8 Stored Procedure / Function
+(Add at least 1)
+
+3.9 Cursor
+(Simple example is enough)
+
+3.10 Exception Handling
+(Just explain handler)
+
+CHAPTER 5 – TRANSACTIONS
+Add:
+
+5 transactions
+
+COMMIT
+
+ROLLBACK
+
+SAVEPOINT
+
+🔥 What From Your LAB WORKBOOK You Should Use
+You mentioned functions.
+
+Good. Add ONE strong stored procedure:
+
+🔹 Stored Procedure (ADD THIS)
+DELIMITER $$
+
+CREATE PROCEDURE get_assessment_result(IN aid INT)
+BEGIN
+    SELECT a.assessment_id, a.total_score, m.status_category
+    FROM assessments a
+    JOIN mental_health_reference m
+    ON a.total_score BETWEEN m.score_range_min AND m.score_range_max
+    WHERE a.assessment_id = aid;
+END$$
+
+DELIMITER ;
+👉 This makes your project look advanced.
+
+🔥 What You Will SHOW in Demo
+You must demonstrate this flow:
+
+Insert user
+
+Insert responses
+
+Trigger calculates total_score
+
+Run SELECT with JOIN
+
+Show classification result
+
+Run stored procedure
+
+If you can show this cleanly → you’re ahead of 90% of class.
+
+⚠️ Common Mistakes (Avoid These)
+Don’t dump random queries → everything must relate to your project
+
+Don’t write theory without SQL
+
+Don’t skip trigger (this is your strongest point)
+
+Don’t say “we will implement” → show implemented
+
+🔥 Minimal PPT (Optional but Smart)
+If you want backup:
+
+Slide 1: Title
+Slide 2: ER Diagram
+Slide 3: Database Tables
+Slide 4: Key Queries (Trigger + Join)
+Slide 5: Demo Flow
+
+That’s it. No animations nonsense.
+
+🔥 Now I’ll Be Ruthless
+Right now your risk is:
+
+You understand structure…
+but you might fail if they ask “WHY this query?”
+
+So answer this:
+
+👉 Why is trigger better than calculating total_score manually every time?
+
+👉 Why do we use JOIN instead of multiple queries?
+
+👉 Why is stored procedure useful?
+
+Answer these properly and you’re ready.
+
+Don’t dodge.
+
+
+Whatever you said right now just went above my head. I don't know how to implement these things. Also, I want to push this project in my github. Help me step by step.
+
+Good. Now we reset and do this properly.
+
+Right now your problem is not DBMS — it’s overwhelm + no execution plan.
+So I’m going to give you a step-by-step path. You follow it exactly. No skipping.
+
+🔥 PHASE 1 — Get Your Database Running (Day 1)
+Step 1: Create Database
+Open MySQL and run:
+
+CREATE DATABASE mental_health_tracker;
+USE mental_health_tracker;
+Step 2: Create Tables
+Run your full DDL (the one you already have).
+If it runs without error → good.
+
+Then check:
+
+SHOW TABLES;
+If you don’t see 5 tables → you already messed up. Fix it before moving.
+
+Step 3: Insert Sample Data
+Use the sample INSERTs I gave earlier.
+
+Then verify:
+
+SELECT * FROM users;
+SELECT * FROM questions;
+SELECT * FROM assessments;
+SELECT * FROM responses;
+SELECT * FROM mental_health_reference;
+👉 If data is not visible → stop. Fix.
+
+🔥 PHASE 2 — Add ONE Powerful Feature (Trigger)
+You don’t need everything. You need one strong feature.
+
+Step 4: Add Trigger (Copy-Paste Exactly)
+DELIMITER $$
+
+CREATE TRIGGER calculate_total_score
+AFTER INSERT ON responses
+FOR EACH ROW
+BEGIN
+    UPDATE assessments
+    SET total_score = (
+        SELECT SUM(score)
+        FROM responses
+        WHERE assessment_id = NEW.assessment_id
+    )
+    WHERE assessment_id = NEW.assessment_id;
+END$$
+
+DELIMITER ;
+Step 5: TEST IT (CRITICAL)
+Now do:
+
+INSERT INTO responses (assessment_id, question_id, score)
+VALUES (1, 1, 10);
+Then check:
+
+SELECT total_score FROM assessments WHERE assessment_id = 1;
+👉 If total_score changes automatically → YOU WIN.
+
+If not → don’t move forward.
+
+🔥 PHASE 3 — Add 3 Queries (That’s Enough for Review)
+You don’t need 20 queries. You need 3 strong ones.
+
+Query 1: JOIN (User + Score)
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a
+ON u.user_id = a.user_id;
+Query 2: Subquery (Above Average)
+SELECT user_id, total_score
+FROM assessments
+WHERE total_score > (
+    SELECT AVG(total_score) FROM assessments
+);
+Query 3: Classification
+SELECT a.assessment_id, m.status_category
+FROM assessments a
+JOIN mental_health_reference m
+ON a.total_score BETWEEN m.score_range_min AND m.score_range_max;
+🔥 PHASE 4 — Python (ONLY IF YOU WANT EXTRA)
+Don’t overcomplicate.
+
+Step 6: Install
+pip install mysql-connector-python
+Step 7: Basic Python File
+Create app.py:
+
+import mysql.connector
+
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="yourpassword",
+    database="mental_health_tracker"
+)
+
+cursor = conn.cursor()
+
+cursor.execute("""
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a ON u.user_id = a.user_id
+""")
+
+for row in cursor.fetchall():
+    print(row)
+Run:
+
+python app.py
+If output prints → done.
+
+🔥 PHASE 5 — Push to GitHub (VERY IMPORTANT)
+Step 8: Folder Structure
+Create folder:
+
+mental-health-dbms/
+│
+├── sql/
+│   ├── schema.sql
+│   ├── insert_data.sql
+│   ├── queries.sql
+│   ├── trigger.sql
+│
+├── python/
+│   └── app.py
+│
+├── report/
+│   └── report.pdf
+│
+└── README.md
+Step 9: Git Commands
+git init
+git add .
+git commit -m "Initial DBMS project setup"
+git branch -M main
+git remote add origin <your-repo-link>
+git push -u origin main
+Step 10: README.md (IMPORTANT)
+Write:
+
+# Mental Health DBMS Project
+
+## Features
+- User assessment system
+- Score calculation using trigger
+- Classification using reference table
+
+## Tech Stack
+- MySQL
+- Python
+
+## How to Run
+1. Run schema.sql
+2. Run insert_data.sql
+3. Run queries.sql
+4. Run app.py
+🔥 PHASE 6 — What You Show in Review
+You only need to show:
+
+Tables exist
+
+Data inserted
+
+Trigger works
+
+One JOIN query
+
+One classification query
+
+That’s it.
+
+⚠️ Brutal Truth
+Right now:
+
+You don’t need “everything”
+
+You need working basics
+
+Most students:
+
+Write 50 queries
+
+Understand 0
+
+You:
+
+Will show 5 things
+
+Understand 100%
+
+🔥 Now Your Task (DO THIS TODAY)
+Create DB + tables
+
+Insert data
+
+Add trigger
+
+Test trigger
+
+Then come back and say:
+
+“Trigger working” / “Not working”
+
+If it’s not working, we debug.
+
+No jumping ahead.
+
+
+Let's take a step back. The previous queries and everything for review 1 was in my project partners computer and I have nothing in my laptop. I don't think I even have sql downloaded. Let's do step by step and till review 2. Also, This project is not only for my assignment but also as my profile building in github. I don't want in github to be files, i want it in professional system. Such as src, models,data, results. Basically how a professional github repo looks like.
+For review 2 we need to prepare till:
+Task to be presented for review 2
+
+Week 4 to 6 project activity with demonstration.
+
+Week 4: Writing queries based on the concepts of Aggregate Functions, constraints, and Set Operations
+
+Week 5: Writing complex queries based on subqueries, joins and views
+
+Week 6: Writing complex queries based on the concepts of functions, Triggers, Cursors and Exception Handling
+
+Report - chapter 1, 2 and 3 softcopies (students use it for presentation to the reviewer and explain the project with dbms concept and commands)
+
+Good. Now we do this like professionals, not like students copying SQL randomly.
+
+You currently have zero setup. So step 1 is not queries — it’s environment + clean structure.
+
+Follow this exactly. Don’t skip.
+
+🔥 PHASE 0 — What You’re Building (Clarity)
+You are building:
+
+A MySQL database system
+
+With Python integration
+
+With structured repo (GitHub-ready)
+
+With DBMS concepts demonstrated (Review 2)
+
+🔥 PHASE 1 — Setup (DO THIS FIRST)
+Step 1: Install MySQL
+Download:
+👉 MySQL Community Server
+
+Also install:
+👉 MySQL Workbench
+
+During install:
+
+Username: root
+
+Set a password (REMEMBER IT)
+
+Step 2: Verify Installation
+Open MySQL Workbench → connect → run:
+
+SELECT 1;
+If it works → good
+If not → stop and fix before moving
+
+🔥 PHASE 2 — Create Your Project Structure (Professional GitHub)
+Step 3: Create Folder
+mental-health-dbms/
+Inside it:
+
+mental-health-dbms/
+│
+├── src/                → Python code
+├── database/
+│   ├── schema/        → DDL
+│   ├── data/          → INSERTS
+│   ├── queries/       → SQL queries
+│   ├── triggers/      → triggers
+│   ├── procedures/    → stored procedures
+│
+├── docs/              → report
+├── results/           → screenshots/output
+├── README.md
+👉 This is how real repos look. Not random files.
+
+🔥 PHASE 3 — Create Database (Your Foundation)
+Step 4: Create schema.sql
+Path:
+
+database/schema/schema.sql
+Paste your full DDL there.
+
+Then run it in MySQL.
+
+Step 5: Create insert_data.sql
+Path:
+
+database/data/insert_data.sql
+Put:
+
+users
+
+questions
+
+assessments
+
+responses
+
+mental_health_reference
+
+Run it.
+
+Step 6: VERIFY (DON’T SKIP)
+Run:
+
+SELECT COUNT(*) FROM users;
+SELECT COUNT(*) FROM questions;
+If tables empty → you messed up.
+
+🔥 PHASE 4 — Week 4 (Basic Queries)
+Create file:
+
+database/queries/week4.sql
+Put ONLY these:
+
+Aggregate
+SELECT AVG(total_score) FROM assessments;
+SELECT MAX(total_score) FROM assessments;
+Constraint Demo
+INSERT INTO responses (assessment_id, question_id, score)
+VALUES (1, 1, 25); -- should FAIL
+Set Operation (Explain limitation)
+SELECT user_id FROM users
+UNION
+SELECT user_id FROM assessments;
+🔥 PHASE 5 — Week 5 (Intermediate)
+Create:
+
+database/queries/week5.sql
+JOIN
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a ON u.user_id = a.user_id;
+Subquery
+SELECT * FROM assessments
+WHERE total_score > (
+    SELECT AVG(total_score) FROM assessments
+);
+View
+CREATE VIEW user_scores AS
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a ON u.user_id = a.user_id;
+🔥 PHASE 6 — Week 6 (ADVANCED — THIS IS YOUR EDGE)
+Create:
+
+database/triggers/trigger.sql
+Trigger
+DELIMITER $$
+
+CREATE TRIGGER calculate_total_score
+AFTER INSERT ON responses
+FOR EACH ROW
+BEGIN
+    UPDATE assessments
+    SET total_score = (
+        SELECT SUM(score)
+        FROM responses
+        WHERE assessment_id = NEW.assessment_id
+    )
+    WHERE assessment_id = NEW.assessment_id;
+END$$
+
+DELIMITER ;
+Stored Procedure
+database/procedures/procedure.sql
+DELIMITER $$
+
+CREATE PROCEDURE get_result(IN aid INT)
+BEGIN
+    SELECT a.total_score, m.status_category
+    FROM assessments a
+    JOIN mental_health_reference m
+    ON a.total_score BETWEEN m.score_range_min AND m.score_range_max
+    WHERE a.assessment_id = aid;
+END$$
+
+DELIMITER ;
+Cursor (Simple, don’t overthink)
+DELIMITER $$
+
+CREATE PROCEDURE list_users()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE uname VARCHAR(100);
+
+    DECLARE cur CURSOR FOR SELECT user_name FROM users;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO uname;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+    END LOOP;
+
+    CLOSE cur;
+END$$
+
+DELIMITER ;
+🔥 PHASE 7 — Python (Professional Touch)
+Create:
+
+src/app.py
+import mysql.connector
+
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="yourpassword",
+    database="mental_health_tracker"
+)
+
+cursor = conn.cursor()
+
+cursor.execute("""
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a ON u.user_id = a.user_id
+""")
+
+for row in cursor.fetchall():
+    print(row)
+🔥 PHASE 8 — README (THIS BUILDS YOUR PROFILE)
+Create:
+
+README.md
+Write:
+
+# Mental Health DBMS System
+
+## Overview
+A relational database system that analyzes user responses to mental health questionnaires and classifies them using score ranges.
+
+## Features
+- Normalized database schema
+- Trigger-based score calculation
+- SQL queries demonstrating DBMS concepts
+- Python-MySQL integration
+
+## Folder Structure
+- database/ → SQL scripts
+- src/ → Python code
+- docs/ → Report
+- results/ → Outputs
+
+## How to Run
+1. Run schema.sql
+2. Run insert_data.sql
+3. Run queries
+4. Run app.py
+🔥 PHASE 9 — What You Show in Review 2
+You show:
+
+Database tables
+
+Insert data
+
+Run:
+
+Aggregate query
+
+Join
+
+Subquery
+
+Show trigger working
+
+Explain stored procedure
+
+DONE.
+
+⚠️ Brutal Truth
+Right now:
+
+You don’t need 100 queries
+
+You need working + explainable system
+
+🔥 YOUR TASK (NO EXCUSES)
+Do ONLY this today:
+
+Install MySQL
+
+Create project folder structure
+
+Create schema.sql
+
+Run it
+
+Then come back and say:
+
+👉 “Setup done” / “Error: ___”
+
+We move step by step. No jumping.
+
+
+Done phase 1. The folder structure is in the format for the long run right. Till the end of the project. 
+
+Good. That’s exactly what I wanted—you’ve crossed the hardest psychological barrier: starting clean.
+
+Now let’s be clear and a bit ruthless:
+
+👉 Yes, your folder structure is correct for the long run
+…but only if you use it properly. Most people create nice folders and then dump everything randomly. Don’t do that.
+
+🔥 Is Your Structure “Professional Enough”?
+Your current structure:
+
+mental-health-dbms/
+│
+├── src/
+├── database/
+│   ├── schema/
+│   ├── data/
+│   ├── queries/
+│   ├── triggers/
+│   ├── procedures/
+│
+├── docs/
+├── results/
+├── README.md
+👉 This is already better than 90% of student GitHub repos
+
+🔥 How This Evolves (Long-Term Vision)
+Here’s how each folder will grow:
+
+📁 database/schema/
+schema.sql → final DB design
+
+Later: versioned schemas (v1, v2)
+
+📁 database/data/
+insert_data.sql → sample/demo data
+
+Later: test datasets
+
+📁 database/queries/
+week4.sql
+
+week5.sql
+
+week6.sql
+
+👉 This is what your evaluator cares about
+
+📁 database/triggers/
+calculate_total_score.sql
+
+📁 database/procedures/
+get_result.sql
+
+maybe more later
+
+📁 src/
+app.py (now)
+
+Later:
+
+CLI interface OR web backend
+
+📁 docs/
+Chapter 1, 2, 3 PDF
+
+Final report
+
+📁 results/
+Screenshots of:
+
+queries running
+
+outputs
+
+trigger working
+
+👉 This is GOLD during review
+
+🔥 Now Reality Check (Important)
+Right now your repo is just empty structure.
+
+If you push this now, it looks like:
+
+“Good intentions, zero execution.”
+
+We fix that next.
+
+🔥 PHASE 2 — Your Next Task (CRITICAL)
+Now we build your actual system foundation.
+
+Step 1: Create schema.sql
+Go to:
+
+database/schema/schema.sql
+Paste your full DDL (tables).
+
+Step 2: Run It in MySQL
+Then verify:
+
+SHOW TABLES;
+You should see:
+
+users
+
+questions
+
+assessments
+
+responses
+
+mental_health_reference
+
+Step 3: Create insert_data.sql
+Put:
+
+2 users
+
+10 questions
+
+1 assessment
+
+10 responses
+
+reference table data
+
+Step 4: RUN + VERIFY
+SELECT * FROM users;
+SELECT * FROM assessments;
+👉 If this doesn’t work → everything after this collapses.
+
+⚠️ Where Most Students Fail (Don’t Be That Person)
+They:
+
+Jump to triggers
+
+Copy-paste queries
+
+Don’t test anything
+
+Then during demo:
+👉 Nothing works
+
+You:
+👉 Will build layer by layer
+
+🔥 What I Need From You Next
+Don’t move ahead blindly.
+
+Do this and come back:
+
+Tell me:
+
+“schema.sql created and executed”
+
+“tables visible”
+
+If error:
+
+paste error
+
+Then we move to:
+👉 inserting data + testing
+👉 then Week 4 queries
+
+🔥 One More Push
+You’re doing something most students don’t:
+👉 building a clean, structured system
+
+If you keep this discipline, this project is not just for marks
+—it becomes something you can actually show in interviews.
+
+Now go execute Phase 2.
+
+
+I don't have the DDL codes or anything. I am building from 0
+
+Good. This is actually better. Starting from 0 means no inherited mess. We’ll build it clean and strong.
+
+You are now going to create your entire database from scratch. I’ll give you exactly what to write — no thinking required yet.
+
+🔥 STEP 1 — Create schema.sql (FOUNDATION)
+Go to:
+
+database/schema/schema.sql
+Paste this FULL code:
+
+CREATE DATABASE IF NOT EXISTS mental_health_tracker;
+USE mental_health_tracker;
+
+-- USERS TABLE
+CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_name VARCHAR(100) NOT NULL,
+    user_email VARCHAR(100) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- QUESTIONS TABLE
+CREATE TABLE questions (
+    question_id INT PRIMARY KEY AUTO_INCREMENT,
+    question_text TEXT NOT NULL,
+    max_score INT DEFAULT 20
+);
+
+-- ASSESSMENTS TABLE
+CREATE TABLE assessments (
+    assessment_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total_score INT,
+    
+    FOREIGN KEY (user_id)
+    REFERENCES users(user_id)
+    ON DELETE CASCADE
+);
+
+-- RESPONSES TABLE
+CREATE TABLE responses (
+    response_id INT PRIMARY KEY AUTO_INCREMENT,
+    assessment_id INT NOT NULL,
+    question_id INT NOT NULL,
+    score INT CHECK (score BETWEEN 1 AND 20),
+    
+    FOREIGN KEY (assessment_id)
+    REFERENCES assessments(assessment_id)
+    ON DELETE CASCADE,
+    
+    FOREIGN KEY (question_id)
+    REFERENCES questions(question_id)
+    ON DELETE CASCADE
+);
+
+-- REFERENCE TABLE
+CREATE TABLE mental_health_reference (
+    ref_id INT PRIMARY KEY AUTO_INCREMENT,
+    score_range_min INT NOT NULL,
+    score_range_max INT NOT NULL,
+    status_category VARCHAR(100) NOT NULL,
+    status_description TEXT,
+    recommendations TEXT,
+    severity_level VARCHAR(50),
+    
+    CHECK (score_range_min <= score_range_max)
+);
+🔥 STEP 2 — Run It
+Open MySQL Workbench → paste → execute
+
+Then run:
+
+SHOW TABLES;
+✅ Expected Output
+You MUST see:
+
+users
+
+questions
+
+assessments
+
+responses
+
+mental_health_reference
+
+⚠️ If You Don’t See This
+Don’t continue. Something is broken.
+
+🔥 STEP 3 — Create insert_data.sql
+Now go to:
+
+database/data/insert_data.sql
+Paste this:
+
+Users
+INSERT INTO users (user_name, user_email) VALUES
+('Rahul Sharma', 'rahul@example.com'),
+('Ananya Iyer', 'ananya@example.com');
+Questions (10)
+INSERT INTO questions (question_text) VALUES
+('Do you feel stressed frequently?'),
+('Do you have trouble sleeping?'),
+('Do you feel anxious without reason?'),
+('Do you feel emotionally drained?'),
+('Do you lose interest in activities?'),
+('Do you feel irritated often?'),
+('Do you struggle to concentrate?'),
+('Do you feel hopeless?'),
+('Do you experience mood swings?'),
+('Do you avoid social interaction?');
+Assessment
+INSERT INTO assessments (user_id, total_score) VALUES
+(1, NULL),
+(2, NULL);
+Responses (User 1)
+INSERT INTO responses (assessment_id, question_id, score) VALUES
+(1,1,10),(1,2,12),(1,3,11),(1,4,13),(1,5,9),
+(1,6,10),(1,7,11),(1,8,12),(1,9,10),(1,10,11);
+Responses (User 2)
+INSERT INTO responses (assessment_id, question_id, score) VALUES
+(2,1,5),(2,2,6),(2,3,7),(2,4,6),(2,5,5),
+(2,6,6),(2,7,7),(2,8,6),(2,9,5),(2,10,6);
+Reference Table (Dataset 2)
+INSERT INTO mental_health_reference 
+(score_range_min, score_range_max, status_category, severity_level)
+VALUES
+(10, 60, 'Stable', 'Low'),
+(61, 110, 'Mild Stress', 'Moderate'),
+(111, 150, 'Moderate Distress', 'High'),
+(151, 200, 'Severe Distress', 'Critical');
+🔥 STEP 4 — Run + VERIFY
+Run:
+
+SELECT * FROM users;
+SELECT * FROM questions;
+SELECT * FROM responses;
+SELECT * FROM assessments;
+⚠️ IMPORTANT OBSERVATION
+Right now:
+
+total_score is NULL
+
+That’s fine
+
+We will FIX it using a trigger next
+
+🔥 YOUR TASK (DO THIS NOW)
+Create schema.sql
+
+Run it
+
+Create insert_data.sql
+
+Run it
+
+Verify all tables
+
+🔥 Reply ONLY with:
+👉 “Tables created + data inserted”
+OR
+👉 Error message
+
+No guessing. No skipping.
+
+Then we move to:
+👉 Trigger (this is where your project becomes strong)
+
+
+Ok. Problem. 
+Where to write the code, in a file in vs code named schema.sql or in the cmd. The cmd is not connecting to the file in my laptop.
+
+Good—you hit the first real-world friction point. This is where most people get stuck.
+
+Let’s fix it cleanly.
+
+🔥 Short Answer
+👉 You WRITE code in a .sql file (VS Code)
+👉 You RUN it inside MySQL Workbench
+
+DO NOT use CMD right now. It will only confuse you.
+
+🔥 Correct Workflow (Follow Exactly)
+✅ Step 1 — Write Code (VS Code)
+Go to your folder:
+
+database/schema/
+Create file:
+
+schema.sql
+Paste the SQL I gave you
+
+👉 VS Code = editor only (like writing notes)
+
+✅ Step 2 — Execute Code (MySQL Workbench)
+Open:
+👉 MySQL Workbench
+
+Do this:
+Open Workbench
+
+Connect to your MySQL server
+
+Click SQL Editor
+
+Click File → Open SQL Script
+
+Select your schema.sql
+
+Click ⚡ (Execute)
+
+✅ Step 3 — Verify
+Run:
+
+SHOW TABLES;
+🔥 Why CMD Didn’t Work (Important)
+You tried to run .sql from CMD.
+
+Problem:
+
+CMD doesn’t know your MySQL path
+
+MySQL CLI needs configuration
+
+File path issues happen
+
+👉 That’s why beginners use Workbench
+
+🔥 Mental Model (Lock This In)
+Tool	Purpose
+VS Code	Write SQL files
+MySQL Workbench	Run SQL
+CMD	Ignore for now
+🔥 Common Mistake (Don’t Do This)
+❌ Writing SQL in VS Code and expecting it to run automatically
+❌ Trying random CMD commands
+❌ Copy-pasting without executing in Workbench
+
+🔥 What You Do Next
+Create schema.sql in VS Code
+
+Open it in Workbench
+
+Run it
+
+Run:
+
+SHOW TABLES;
+🔥 Reply with ONE of these
+👉 “Tables created successfully”
+👉 OR paste the exact error
+
+No moving ahead until this is solid.
+
+We’re building this like engineers.
+
+
+I have opened workbench and connected to my server and put in the password. Now what to do?
+
+Good. Now don’t overthink—just follow clicks.
+
+🔥 STEP-BY-STEP (You’re inside MySQL Workbench)
+✅ Step 1 — Open SQL Editor
+After connecting, you’ll see the Workbench home.
+
+👉 Click your connection (the one you just used)
+
+Now you should see a screen with:
+
+Left side → Schemas
+
+Top → toolbar with ⚡ (execute button)
+
+✅ Step 2 — Open Your SQL File
+Top menu:
+
+👉 File → Open SQL Script
+
+Now:
+
+Go to your project folder
+
+Open:
+
+database/schema/schema.sql
+✅ Step 3 — Execute the Code
+Now you’ll see your SQL code in the editor.
+
+👉 Click the ⚡ button (Execute)
+
+OR press:
+
+Ctrl + Shift + Enter
+✅ Step 4 — Check If It Worked
+In the same editor, type:
+
+SHOW TABLES;
+👉 Click ⚡ again
+
+✅ Expected Result
+You should see:
+
+users
+
+questions
+
+assessments
+
+responses
+
+mental_health_reference
+
+⚠️ If You Don’t See Tables
+Check:
+
+Did you run USE mental_health_tracker;?
+
+Left panel → click refresh icon 🔄 under SCHEMAS
+
+🔥 IMPORTANT VISUAL CHECK
+On left panel:
+
+👉 Expand:
+
+Schemas → mental_health_tracker → Tables
+If tables appear → YOU’RE DONE WITH STEP 1
+
+🔥 If Error Happens
+Copy the error and send it.
+
+🔥 Your Task
+Do exactly this and reply:
+
+👉 “Tables visible in schema”
+OR
+👉 paste error
+
+No moving ahead yet.
+
+
+Tables are visible in schema
+
+Good. That’s your first real checkpoint cleared. Most people don’t even get here cleanly.
+
+Now we move forward without breaking anything.
+
+🔥 PHASE 3 — Insert Data (Make Your DB Actually Useful)
+Right now:
+👉 You have empty tables = useless system
+We fix that.
+
+✅ Step 1 — Create insert_data.sql
+In VS Code:
+
+Go to:
+
+database/data/
+Create file:
+
+insert_data.sql
+✅ Step 2 — Paste This Data
+Paste EXACTLY:
+
+🔹 Users
+INSERT INTO users (user_name, user_email) VALUES
+('Rahul Sharma', 'rahul@example.com'),
+('Ananya Iyer', 'ananya@example.com');
+🔹 Questions (10)
+INSERT INTO questions (question_text) VALUES
+('Do you feel stressed frequently?'),
+('Do you have trouble sleeping?'),
+('Do you feel anxious without reason?'),
+('Do you feel emotionally drained?'),
+('Do you lose interest in activities?'),
+('Do you feel irritated often?'),
+('Do you struggle to concentrate?'),
+('Do you feel hopeless?'),
+('Do you experience mood swings?'),
+('Do you avoid social interaction?');
+🔹 Assessments
+INSERT INTO assessments (user_id, total_score) VALUES
+(1, NULL),
+(2, NULL);
+🔹 Responses (User 1)
+INSERT INTO responses (assessment_id, question_id, score) VALUES
+(1,1,10),(1,2,12),(1,3,11),(1,4,13),(1,5,9),
+(1,6,10),(1,7,11),(1,8,12),(1,9,10),(1,10,11);
+🔹 Responses (User 2)
+INSERT INTO responses (assessment_id, question_id, score) VALUES
+(2,1,5),(2,2,6),(2,3,7),(2,4,6),(2,5,5),
+(2,6,6),(2,7,7),(2,8,6),(2,9,5),(2,10,6);
+🔹 Reference Table (VERY IMPORTANT)
+INSERT INTO mental_health_reference 
+(score_range_min, score_range_max, status_category, severity_level)
+VALUES
+(10, 60, 'Stable', 'Low'),
+(61, 110, 'Mild Stress', 'Moderate'),
+(111, 150, 'Moderate Distress', 'High'),
+(151, 200, 'Severe Distress', 'Critical');
+🔥 Step 3 — Run It in Workbench
+Same process:
+
+👉 File → Open SQL Script → insert_data.sql
+👉 Click ⚡ Execute
+
+🔥 Step 4 — VERIFY (CRITICAL)
+Run these one by one:
+
+SELECT * FROM users;
+SELECT * FROM questions;
+SELECT * FROM assessments;
+SELECT * FROM responses;
+SELECT * FROM mental_health_reference;
+✅ What You Should See
+2 users
+
+10 questions
+
+2 assessments
+
+20 responses
+
+4 reference rows
+
+⚠️ If Something Is Wrong
+Typical errors:
+
+Foreign key error → order issue
+
+Duplicate insert → already ran once
+
+👉 If error → paste it here
+
+🔥 What You Just Built (Understand This)
+Now your DB has:
+
+Real users
+
+Real responses
+
+Classification logic
+
+👉 This is your Dataset 1 + Dataset 2 DONE
+
+🔥 Next Step (Don’t Jump Yet)
+Next we will:
+👉 Add trigger → auto calculate score
+👉 Then queries (Week 4–6)
+
+🔥 Your Task
+Reply with:
+
+👉 “Data inserted + verified”
+OR
+👉 error message
+
+No guessing. No skipping.
+
+We build this clean.
+
+
+Data inserted and verified
+
+Good. Now your project has a real database, not just empty tables.
+Now we add the thing that will make your project stand out in review:
+
+👉 AUTOMATION (Trigger)
+
+Right now:
+
+total_score = NULL ❌
+We will make it:
+
+automatically calculated ✅
+
+🔥 PHASE 4 — Add Trigger (MOST IMPORTANT PART)
+✅ Step 1 — Create Trigger File
+In VS Code:
+
+Go to:
+
+database/triggers/
+Create file:
+
+trigger.sql
+✅ Step 2 — Paste This Code
+DELIMITER $$
+
+CREATE TRIGGER calculate_total_score
+AFTER INSERT ON responses
+FOR EACH ROW
+BEGIN
+    UPDATE assessments
+    SET total_score = (
+        SELECT SUM(score)
+        FROM responses
+        WHERE assessment_id = NEW.assessment_id
+    )
+    WHERE assessment_id = NEW.assessment_id;
+END$$
+
+DELIMITER ;
+✅ Step 3 — Run It in Workbench
+Same method:
+
+👉 File → Open SQL Script → trigger.sql
+👉 Click ⚡ Execute
+
+✅ Step 4 — TEST IT (CRITICAL)
+Now we test if it actually works.
+
+Run:
+
+INSERT INTO responses (assessment_id, question_id, score)
+VALUES (1, 1, 5);
+Now check:
+
+SELECT total_score FROM assessments WHERE assessment_id = 1;
+🔥 EXPECTED RESULT
+👉 total_score should now be:
+
+NOT NULL
+
+Automatically calculated
+
+⚠️ If It Doesn’t Work
+Common issues:
+
+Trigger not created
+
+Wrong delimiter
+
+Not re-inserting response
+
+👉 If it fails → send error
+
+🔥 VERY IMPORTANT (Understand This)
+If examiner asks:
+
+👉 “Why trigger?”
+
+You say:
+
+Trigger automatically updates total_score whenever a response is inserted, ensuring data consistency without manual calculation.
+
+This is a strong DBMS concept answer
+
+🔥 Clean Up (Optional but Smart)
+We inserted an extra response just for testing.
+
+If you want:
+
+DELETE FROM responses WHERE score = 5 AND assessment_id = 1;
+🔥 What You Have Now
+You’ve built:
+
+Tables ✅
+
+Data ✅
+
+Relationships ✅
+
+AUTOMATION ✅
+
+👉 You are already ahead of most students.
+
+🔥 Next Step
+After this, we move to:
+
+👉 Week 4 queries (Aggregate, constraints, set ops)
+
+🔥 Your Task
+Reply with:
+
+👉 “Trigger working”
+OR
+👉 error message
+
+Don’t guess. Test properly.
+
+
+trigger working
+
+Good. Now your project is no longer basic—you’ve got automation, which already puts you ahead.
+
+Now we move to Review 2 core requirement: SQL Queries (Week 4 → Week 6)
+But we’re not dumping random queries—you’ll build only what you can explain in viva.
+
+🔥 PHASE 5 — Week 4 (Basic but Important)
+✅ Step 1 — Create File
+Go to:
+
+database/queries/
+Create:
+
+week4.sql
+✅ Step 2 — Add These Queries
+Paste:
+
+🔹 1. Aggregate Functions
+-- Average score of all assessments
+SELECT AVG(total_score) AS average_score FROM assessments;
+
+-- Maximum score
+SELECT MAX(total_score) AS max_score FROM assessments;
+
+-- Minimum score
+SELECT MIN(total_score) AS min_score FROM assessments;
+👉 Viva answer:
+Aggregate functions summarize data (AVG, MAX, MIN)
+
+🔹 2. Constraint Demonstration
+-- This should FAIL (score > 20)
+INSERT INTO responses (assessment_id, question_id, score)
+VALUES (1, 1, 25);
+👉 Viva answer:
+CHECK constraint prevents invalid data
+
+🔹 3. Set Operation (UNION)
+SELECT user_id FROM users
+UNION
+SELECT user_id FROM assessments;
+👉 Important:
+If asked “INTERSECT?”
+Say:
+
+MySQL does not support INTERSECT, so UNION is used instead.
+
+🔥 Step 3 — Run and Screenshot
+Run all queries in Workbench.
+
+👉 Take screenshots:
+
+Aggregate output
+
+Constraint error
+
+UNION result
+
+Save in:
+
+results/
+🔥 PHASE 6 — Week 5 (More Important)
+✅ Create File
+week5.sql
+🔹 1. JOIN (VERY IMPORTANT)
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a ON u.user_id = a.user_id;
+👉 Viva:
+JOIN combines data from multiple tables
+
+🔹 2. Subquery
+SELECT * FROM assessments
+WHERE total_score > (
+    SELECT AVG(total_score) FROM assessments
+);
+👉 Viva:
+Subquery = query inside another query
+
+🔹 3. View
+CREATE VIEW user_scores AS
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a ON u.user_id = a.user_id;
+Test it:
+
+SELECT * FROM user_scores;
+👉 Viva:
+View = virtual table
+
+🔥 PHASE 7 — Week 6 (Your Advantage Zone)
+✅ Create File
+week6.sql
+🔹 1. Stored Procedure
+DELIMITER $$
+
+CREATE PROCEDURE get_result(IN aid INT)
+BEGIN
+    SELECT a.total_score, m.status_category
+    FROM assessments a
+    JOIN mental_health_reference m
+    ON a.total_score BETWEEN m.score_range_min AND m.score_range_max
+    WHERE a.assessment_id = aid;
+END$$
+
+DELIMITER ;
+Run:
+
+CALL get_result(1);
+🔹 2. Cursor (Simple)
+DELIMITER $$
+
+CREATE PROCEDURE list_users()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE uname VARCHAR(100);
+
+    DECLARE cur CURSOR FOR SELECT user_name FROM users;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO uname;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+    END LOOP;
+
+    CLOSE cur;
+END$$
+
+DELIMITER ;
+🔹 3. Exception Handling (Explain Only)
+👉 You don’t need complex code.
+
+Say:
+
+We use CONTINUE HANDLER to handle exceptions like cursor end condition.
+
+🔥 WHAT YOU HAVE NOW
+You’ve covered:
+
+✔ Aggregate
+✔ Constraints
+✔ Set operations
+✔ Joins
+✔ Subqueries
+✔ Views
+✔ Trigger
+✔ Procedure
+✔ Cursor
+✔ Exception handling
+
+👉 That is EXACTLY what Review 2 wants.
+
+🔥 NOW THE REAL TEST
+I’m going to push you.
+
+Answer:
+
+Why is JOIN better than writing two separate queries?
+
+What is the difference between VIEW and TABLE?
+
+Why do we use stored procedure instead of normal query?
+
+Don’t skip this. If you can’t answer, you’re not ready.
+
+
+We can do questions later. Let's complete the prep for review 2 completely. I have pushed and completed the github push: https://github.com/Dia-Garg/Mental_health_analyser
+Now let's complete the report. I had sent you the folder earlier. 
+
+Good. This is the right move—finish the report and lock Review 2.
+
+I’m going to give you exact content you can directly paste into your report (Chapter 3). No fluff, no confusion.
+
+🔥 CHAPTER 3 — SQL IMPLEMENTATION (FINAL VERSION)
+Use this structure exactly.
+
+CHAPTER 3: SQL IMPLEMENTATION
+3.1 Introduction
+This chapter focuses on the implementation of SQL queries based on various DBMS concepts such as aggregate functions, constraints, set operations, joins, subqueries, views, triggers, stored procedures, cursors, and exception handling. These queries are executed on the Mental Health Assessment Database to demonstrate data manipulation, retrieval, and automation.
+
+3.2 Aggregate Functions
+Aggregate functions are used to perform calculations on multiple rows of data and return a single value.
+
+Query 1: Average Score
+SELECT AVG(total_score) AS average_score FROM assessments;
+Query 2: Maximum Score
+SELECT MAX(total_score) AS max_score FROM assessments;
+Query 3: Minimum Score
+SELECT MIN(total_score) AS min_score FROM assessments;
+Explanation:
+These functions help in analyzing overall user performance in assessments.
+
+3.3 Constraints
+Constraints are used to enforce rules on data in a table.
+
+Example: CHECK Constraint
+INSERT INTO responses (assessment_id, question_id, score)
+VALUES (1, 1, 25);
+Explanation:
+This query fails because the score exceeds the allowed range (1–20), ensuring data integrity.
+
+3.4 Set Operations
+Set operations combine results from multiple queries.
+
+Example: UNION
+SELECT user_id FROM users
+UNION
+SELECT user_id FROM assessments;
+Explanation:
+UNION removes duplicates and combines results from both tables.
+
+Note:
+MySQL does not support INTERSECT directly.
+
+3.5 Joins
+Joins are used to combine data from multiple tables based on a relationship.
+
+Example: INNER JOIN
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a ON u.user_id = a.user_id;
+Explanation:
+This query retrieves user names along with their corresponding assessment scores.
+
+3.6 Subqueries
+A subquery is a query nested inside another query.
+
+Example:
+SELECT * FROM assessments
+WHERE total_score > (
+    SELECT AVG(total_score) FROM assessments
+);
+Explanation:
+This retrieves assessments where the score is above average.
+
+3.7 Views
+A view is a virtual table based on the result of a SQL query.
+
+Example:
+CREATE VIEW user_scores AS
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a ON u.user_id = a.user_id;
+SELECT * FROM user_scores;
+Explanation:
+Views simplify complex queries and improve security by restricting access.
+
+3.8 Triggers
+A trigger is a database object that automatically executes in response to certain events.
+
+Example:
+CREATE TRIGGER calculate_total_score
+AFTER INSERT ON responses
+FOR EACH ROW
+BEGIN
+    UPDATE assessments
+    SET total_score = (
+        SELECT SUM(score)
+        FROM responses
+        WHERE assessment_id = NEW.assessment_id
+    )
+    WHERE assessment_id = NEW.assessment_id;
+END;
+Explanation:
+This trigger automatically updates the total_score whenever a new response is inserted, ensuring consistency.
+
+3.9 Stored Procedure
+A stored procedure is a precompiled collection of SQL statements stored in the database.
+
+Example:
+CREATE PROCEDURE get_result(IN aid INT)
+BEGIN
+    SELECT a.total_score, m.status_category
+    FROM assessments a
+    JOIN mental_health_reference m
+    ON a.total_score BETWEEN m.score_range_min AND m.score_range_max
+    WHERE a.assessment_id = aid;
+END;
+CALL get_result(1);
+Explanation:
+This procedure retrieves the mental health status based on the total score.
+
+3.10 Cursor
+A cursor is used to process query results row by row.
+
+Example:
+DECLARE cur CURSOR FOR SELECT user_name FROM users;
+Explanation:
+Cursors allow sequential processing of records.
+
+3.11 Exception Handling
+Exception handling is used to manage runtime errors.
+
+Example:
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+Explanation:
+This handles the condition when no more rows are available in a cursor.
+
+🔥 WHAT YOU MUST ADD (VERY IMPORTANT)
+📸 Screenshots
+In your report, after each section add:
+
+Query screenshot
+
+Output screenshot
+
+Put from your:
+
+results/
+🔥 FINAL CHECKLIST FOR REVIEW 2
+You must have:
+
+✔ Chapter 1 (done)
+✔ Chapter 2 (ER + schema)
+✔ Chapter 3 (this content)
+✔ SQL files in GitHub
+✔ Screenshots
+✔ Working demo
+
+⚠️ Brutal Truth
+If you just submit text → average
+If you show working queries + screenshots → strong
+If you explain logic → top tier
+
+🔥 Next Move
+Now tell me:
+
+👉 Do you want me to:
+
+Prepare Chapter 5 (Transactions)
+
+Prepare Viva answers (rapid fire)
+
+Help you clean your GitHub to look elite
+
+Pick one.
+
+
+Chapter 3 is:
+CHAPTER 3
+Complex queries based on the concepts of constraints, sets, joins, views, Triggers and Cursors.
+(min 3 questions with queries for all topics)
+< create complex queries based on the sub-topic with questions and SQL statement with output>
+
+Adding Constraints and queries based on constraints
+Question:
+
+SQL Statement:
+
+Output:
+
+Queries based on Aggregate Functions
+
+Question:
+
+SQL Statement:
+
+Output:
+
+Complex queries based on Sets
+Question:
+
+SQL Statement:
+
+Output:
+
+Complex queries based on Subqueries
+
+Question:
+
+SQL Statement:
+
+Output:
+
+Complex queries based on Joins
+Question:
+
+SQL Statement:
+
+Output:
+
+Complex queries based on views
+Question:
+
+SQL Statement:
+
+Output:
+
+
+Complex queries based on Triggers
+Question:
+
+SQL Statement:
+
+Output:
+
+Complex queries based on Cursors
+Question:
+
+SQL Statement:
+
+Output:
+
+
+Give me according to this 
+
+Good. This is finally precise. Now I’ll give you exact Chapter 3 content in your required format — clean, structured, and strong for viva.
+
+You will copy this into your report and just add screenshots under “Output”.
+
+CHAPTER 3
+Complex queries based on the concepts of constraints, sets, joins, views, triggers and cursors
+
+🔹 Adding Constraints and Queries Based on Constraints
+Question:
+Ensure that invalid scores (outside 1–20) are not inserted into the responses table.
+
+SQL Statement:
+INSERT INTO responses (assessment_id, question_id, score)
+VALUES (1, 1, 25);
+Output:
+Error message indicating violation of CHECK constraint.
+
+Question:
+Insert a valid response into the responses table.
+
+SQL Statement:
+INSERT INTO responses (assessment_id, question_id, score)
+VALUES (1, 2, 15);
+Output:
+Record inserted successfully.
+
+Question:
+Ensure that duplicate emails are not allowed in users table.
+
+SQL Statement:
+INSERT INTO users (user_name, user_email)
+VALUES ('Test User', 'rahul@example.com');
+Output:
+Error due to UNIQUE constraint violation.
+
+🔹 Queries Based on Aggregate Functions
+Question:
+Find the average score of all assessments.
+
+SQL Statement:
+SELECT AVG(total_score) AS average_score FROM assessments;
+Output:
+Displays average total score.
+
+Question:
+Find the highest score achieved.
+
+SQL Statement:
+SELECT MAX(total_score) AS max_score FROM assessments;
+Output:
+Displays highest total score.
+
+Question:
+Find the lowest score achieved.
+
+SQL Statement:
+SELECT MIN(total_score) AS min_score FROM assessments;
+Output:
+Displays lowest total score.
+
+🔹 Complex Queries Based on Sets
+Question:
+Retrieve all user IDs from both users and assessments tables without duplicates.
+
+SQL Statement:
+SELECT user_id FROM users
+UNION
+SELECT user_id FROM assessments;
+Output:
+List of unique user IDs.
+
+Question:
+Retrieve all user IDs including duplicates.
+
+SQL Statement:
+SELECT user_id FROM users
+UNION ALL
+SELECT user_id FROM assessments;
+Output:
+List of user IDs including duplicates.
+
+Question:
+Find common user IDs using logical comparison.
+
+SQL Statement:
+SELECT user_id FROM users
+WHERE user_id IN (SELECT user_id FROM assessments);
+Output:
+List of user IDs present in both tables.
+
+🔹 Complex Queries Based on Subqueries
+Question:
+Find assessments with scores above average.
+
+SQL Statement:
+SELECT * FROM assessments
+WHERE total_score > (
+    SELECT AVG(total_score) FROM assessments
+);
+Output:
+Displays assessments with above-average scores.
+
+Question:
+Find users who have taken assessments.
+
+SQL Statement:
+SELECT user_name FROM users
+WHERE user_id IN (
+    SELECT user_id FROM assessments
+);
+Output:
+List of users who attempted the test.
+
+Question:
+Find the assessment with the highest score.
+
+SQL Statement:
+SELECT * FROM assessments
+WHERE total_score = (
+    SELECT MAX(total_score) FROM assessments
+);
+Output:
+Displays the highest scoring assessment.
+
+🔹 Complex Queries Based on Joins
+Question:
+Display user names with their total scores.
+
+SQL Statement:
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a ON u.user_id = a.user_id;
+Output:
+Shows user names and scores.
+
+Question:
+Display user responses with question text.
+
+SQL Statement:
+SELECT u.user_name, q.question_text, r.score
+FROM users u
+JOIN assessments a ON u.user_id = a.user_id
+JOIN responses r ON a.assessment_id = r.assessment_id
+JOIN questions q ON r.question_id = q.question_id;
+Output:
+Displays user responses for each question.
+
+Question:
+Display assessment results with mental health category.
+
+SQL Statement:
+SELECT a.assessment_id, a.total_score, m.status_category
+FROM assessments a
+JOIN mental_health_reference m
+ON a.total_score BETWEEN m.score_range_min AND m.score_range_max;
+Output:
+Displays classification of each assessment.
+
+🔹 Complex Queries Based on Views
+Question:
+Create a view for user scores.
+
+SQL Statement:
+CREATE VIEW user_scores AS
+SELECT u.user_name, a.total_score
+FROM users u
+JOIN assessments a ON u.user_id = a.user_id;
+Output:
+View created successfully.
+
+Question:
+Retrieve data from the view.
+
+SQL Statement:
+SELECT * FROM user_scores;
+Output:
+Displays user names and scores.
+
+Question:
+Create a view for assessment classification.
+
+SQL Statement:
+CREATE VIEW assessment_results AS
+SELECT a.assessment_id, m.status_category
+FROM assessments a
+JOIN mental_health_reference m
+ON a.total_score BETWEEN m.score_range_min AND m.score_range_max;
+Output:
+View created successfully.
+
+🔹 Complex Queries Based on Triggers
+Question:
+Automatically update total score when a response is inserted.
+
+SQL Statement:
+DELIMITER $$
+
+CREATE TRIGGER calculate_total_score
+AFTER INSERT ON responses
+FOR EACH ROW
+BEGIN
+    UPDATE assessments
+    SET total_score = (
+        SELECT SUM(score)
+        FROM responses
+        WHERE assessment_id = NEW.assessment_id
+    )
+    WHERE assessment_id = NEW.assessment_id;
+END$$
+
+DELIMITER ;
+Output:
+Trigger created successfully.
+
+Question:
+Insert response to test trigger.
+
+SQL Statement:
+INSERT INTO responses (assessment_id, question_id, score)
+VALUES (1, 3, 12);
+Output:
+Response inserted and total_score updated automatically.
+
+Question:
+Check updated total score.
+
+SQL Statement:
+SELECT total_score FROM assessments WHERE assessment_id = 1;
+Output:
+Updated total score displayed.
+
+🔹 Complex Queries Based on Cursors
+Question:
+Iterate through all users using cursor.
+
+SQL Statement:
+DECLARE cur CURSOR FOR SELECT user_name FROM users;
+Output:
+Cursor declared successfully.
+
+Question:
+Open and fetch cursor data.
+
+SQL Statement:
+OPEN cur;
+FETCH cur INTO @name;
+Output:
+User name fetched.
+
+Question:
+Close the cursor.
+
+SQL Statement:
+CLOSE cur;
+Output:
+Cursor closed successfully.
+
+🔥 FINAL INSTRUCTION (IMPORTANT)
+Now YOU must:
+
+Run each query in MySQL Workbench
+
+Take screenshots
+
+Paste under each “Output”
+
+⚠️ Reality Check
+If you just paste this → average
+If you show execution → strong
+If you explain ANY 2 sections clearly → top tier
+
+🔥 Next Step
+Now we finish strong.
+
+Tell me:
+
+👉 Do you want:
+
+Chapter 5 (Transactions)
+
+OR Full viva prep (most likely questions + answers)
+
+We finish this completely.
+
+
+DECLARE is not working.
+
+Good catch. This is where most people blindly copy and get destroyed in viva.
+
+👉 DECLARE is NOT working because you are using it outside a stored procedure.
+
+In MySQL:
+
+DECLARE ❌ cannot be used directly
+
+DECLARE ✅ only works inside a procedure/function/trigger
+
+🔥 Why Your Current Code Fails
+You probably ran:
+
+DECLARE cur CURSOR FOR SELECT user_name FROM users;
+👉 MySQL error: "DECLARE is not valid at this position"
+
+Because:
+
+You are in normal SQL editor
+
+Not inside a procedure
+
+✅ Correct Way to Use Cursor (Working Version)
+You MUST wrap it inside a procedure.
+
+🔹 Replace Your Cursor Section with THIS
+Question:
+Iterate through all users using a cursor.
+
+SQL Statement:
+DELIMITER $$
+
+CREATE PROCEDURE list_users_cursor()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE uname VARCHAR(100);
+
+    DECLARE cur CURSOR FOR 
+        SELECT user_name FROM users;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO uname;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+    END LOOP;
+
+    CLOSE cur;
+END$$
+
+DELIMITER ;
+To Execute:
+CALL list_users_cursor();
+Output:
+Procedure executes successfully and processes all user records.
+
+🔥 What You Say in Viva
+If they ask:
+
+👉 “Why did DECLARE not work?”
+
+You say:
+
+DECLARE statements are only allowed inside stored procedures, functions, or triggers in MySQL. They cannot be used independently in the SQL editor.
+
+🔥 Important Reality Check
+Cursor in your project:
+
+Is NOT practically needed
+
+Is ONLY for academic requirement
+
+👉 Say this if pushed:
+
+Cursor is used here to demonstrate row-by-row processing as required by DBMS concepts.
+
+🔥 Fix Your Report
+Replace your old cursor section with:
+
+Procedure-based cursor (above)
+
+CALL statement
+
+Screenshot of execution
+
+🔥 Now Final Step Before Review
+You now have:
+
+✔ Constraints
+✔ Aggregate
+✔ Set ops
+✔ Joins
+✔ Subqueries
+✔ Views
+✔ Trigger
+✔ Cursor (fixed)
+
+🔥 Your Next Move
+Tell me:
+
+👉 “Cursor fixed”
+
+Then we go to:
+👉 Final viva prep (this is where you secure marks)
+
+
+Open cur and closed cur also not working
+
+Good—you’ve hit the exact trap most people fall into.
+
+Let me be blunt:
+
+👉 OPEN, FETCH, CLOSE will NOT work individually in MySQL Workbench
+They ONLY work inside a stored procedure block
+
+🔥 Why Your Code Is Failing
+You probably tried:
+
+OPEN cur;
+or
+
+CLOSE cur;
+👉 This will ALWAYS fail ❌
+
+Because:
+
+cur doesn’t exist globally
+
+It only exists inside the procedure where it is declared
+
+✅ The ONLY Correct Way (Don’t Deviate)
+You must do 3 steps in order:
+
+✅ Step 1 — Create Procedure (RUN THIS ONCE)
+DELIMITER $$
+
+CREATE PROCEDURE list_users_cursor()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE uname VARCHAR(100);
+
+    DECLARE cur CURSOR FOR 
+        SELECT user_name FROM users;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO uname;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+    END LOOP;
+
+    CLOSE cur;
+END$$
+
+DELIMITER ;
+✅ Step 2 — Execute Procedure
+CALL list_users_cursor();
+✅ Step 3 — That’s It
+👉 You DO NOT manually run:
+
+OPEN
+
+FETCH
+
+CLOSE
+
+They run inside the procedure automatically
+
+🔥 What Output Should You Expect?
+Here’s the truth:
+
+👉 This procedure doesn’t print rows (MySQL limitation)
+
+So:
+
+It runs successfully ✅
+
+But shows “Query OK” instead of data
+
+🔥 If You Want Visible Output (Better for Demo)
+Use this improved version:
+
+DELIMITER $$
+
+CREATE PROCEDURE list_users_cursor()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE uname VARCHAR(100);
+
+    DECLARE cur CURSOR FOR 
+        SELECT user_name FROM users;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO uname;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        SELECT uname;  -- THIS LINE SHOWS OUTPUT
+
+    END LOOP;
+
+    CLOSE cur;
+END$$
+
+DELIMITER ;
+Now run:
+
+CALL list_users_cursor();
+👉 You will SEE names printed
+
+🔥 Fix Your Report (IMPORTANT)
+Replace your cursor section with:
+
+Question:
+Retrieve user names using cursor.
+
+SQL Statement:
+(Use the corrected procedure)
+
+Execution:
+CALL list_users_cursor();
+Output:
+User names are displayed sequentially using cursor.
+
+⚠️ Brutal Truth
+You were trying to:
+
+Use advanced feature
+
+Without understanding scope
+
+That’s exactly how people lose marks in viva.
+
+Now you understand:
+👉 Cursor = procedure-only feature
+
+🔥 Final Check
+Say:
+
+👉 “Cursor working with procedure”
+
+Then we move to:
+👉 VIVA PREP (this is what will actually decide your marks)
+
+
+give me the final  3 questions and sql statement and output for 3.8 complex queries based on cursors
+
+Good. Now we do this properly—clean, correct, and defendable.
+
+You only need 3 solid cursor-based questions, all using a procedure (because that’s the only valid way in MySQL).
+
+Copy this directly into your report.
+
+🔹 3.8 Complex Queries Based on Cursors
+Question 1:
+Retrieve all user names one by one using a cursor.
+
+SQL Statement:
+DELIMITER $$
+
+CREATE PROCEDURE get_all_users()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE uname VARCHAR(100);
+
+    DECLARE cur CURSOR FOR 
+        SELECT user_name FROM users;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO uname;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        SELECT uname AS user_name;
+
+    END LOOP;
+
+    CLOSE cur;
+END$$
+
+DELIMITER ;
+Execution:
+CALL get_all_users();
+Output:
+List of user names displayed one by one.
+
+Question 2:
+Retrieve all assessment scores using a cursor.
+
+SQL Statement:
+DELIMITER $$
+
+CREATE PROCEDURE get_all_scores()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE score_val INT;
+
+    DECLARE cur CURSOR FOR 
+        SELECT total_score FROM assessments;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO score_val;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        SELECT score_val AS total_score;
+
+    END LOOP;
+
+    CLOSE cur;
+END$$
+
+DELIMITER ;
+Execution:
+CALL get_all_scores();
+Output:
+All assessment scores displayed sequentially.
+
+Question 3:
+Retrieve user names along with their scores using a cursor.
+
+SQL Statement:
+DELIMITER $$
+
+CREATE PROCEDURE get_user_scores_cursor()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE uname VARCHAR(100);
+    DECLARE score_val INT;
+
+    DECLARE cur CURSOR FOR 
+        SELECT u.user_name, a.total_score
+        FROM users u
+        JOIN assessments a ON u.user_id = a.user_id;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO uname, score_val;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        SELECT uname AS user_name, score_val AS total_score;
+
+    END LOOP;
+
+    CLOSE cur;
+END$$
+
+DELIMITER ;
+Execution:
+CALL get_user_scores_cursor();
+Output:
+Displays user names along with their total scores one by one.
+
+🔥 IMPORTANT (Don’t Miss This)
+When you take screenshots:
+
+Run each CALL statement
+
+Capture the output rows
+
+🔥 What You Say in Viva (Memorize This Line)
+Cursor is used for row-by-row processing of query results, unlike normal SQL which works on the entire result set at once.
+
+⚠️ Final Reality Check
+Most students:
+
+Write cursor ❌
+
+Can’t run it ❌
+
+Can’t explain it ❌
+
+You:
+
+Have working procedures ✅
+
+Can demonstrate ✅
+
+Can explain ✅
+
+🔥 Next Move
+We’re basically done with Review 2 technically.
+
+Now choose:
+
+👉 Viva prep (most likely questions + killer answers)
+OR
+👉 Final polish (what to say + how to present demo smoothly)
+
+
+
+Report template(DBMS).docx
+Document
+This is what it looks like right now for review 2. Do I need to list all the figures in the list of figures???
+
+Short answer: Yes — but only for the figures you actually include. Not blindly everything.
+
+Now let me be precise (this is where people lose marks unnecessarily):
+
+🔥 What You’re Doing Right
+Your List of Figures already has entries for Chapter 3 (3.1, 3.2) — good.
+
+⚠️ What’s Missing (And Will Cost Marks)
+Right now your Chapter 3 has:
+
+3.1 → Constraints ✔ (listed)
+
+3.2 → Aggregate ✔ (listed)
+
+3.3 → Sets ❌ (NOT listed)
+
+3.4 → Subqueries ❌
+
+3.5 → Joins ❌
+
+3.6 → Views ❌
+
+3.7 → Triggers ❌
+
+3.8 → Cursors ❌
+
+👉 But you DO have figures for all of these in the report body
+
+That means:
+
+Your List of Figures is incomplete → looks careless
+
+🔥 What You SHOULD Do (Correct Approach)
+✅ Rule:
+👉 Every screenshot (figure) in your report MUST be listed
+
+✅ Add These Entries
+Extend your List of Figures like this:
+
+Figure 3.3.1: List of unique user IDs
+Figure 3.3.2: List of user IDs including duplicates
+Figure 3.3.3: Common user IDs
+
+Figure 3.4.1: Above-average assessments
+Figure 3.4.2: Users who attempted test
+Figure 3.4.3: Highest scoring assessment
+
+Figure 3.5.1: User names with scores
+Figure 3.5.2: User responses with questions
+Figure 3.5.3: Assessment classification
+
+Figure 3.6.1: View output (user_scores)
+
+Figure 3.7.1: Updated total score after trigger
+
+Figure 3.8.1: Cursor output – user names
+Figure 3.8.2: Cursor output – scores
+Figure 3.8.3: Cursor output – user + score
+👉 Page numbers: update after final PDF export
+
+⚠️ Common Mistake (Don’t Do This)
+❌ Listing figures without actual screenshots
+❌ Missing numbering consistency (3.3.1, 3.3.2, etc.)
+❌ Wrong naming (be consistent with your captions)
+
+🔥 Brutal Truth
+Right now your report is:
+
+Technically strong ✅
+
+Structurally slightly sloppy ⚠️
+
+Fixing List of Figures:
+👉 makes it look professional + complete
+
+🔥 Extra Improvement (High Impact, Low Effort)
+Also fix this:
+
+In “LIST OF TABLES”
+You wrote:
+
+Figure No.
+👉 WRONG
+
+Change to:
+
+Table No.
+🔥 Final Verdict
+👉 Yes, include all figures
+👉 No, don’t overcomplicate
+👉 Just make it complete and consistent
+
+🔥 Next Move
+Now we finish strong.
+
+Tell me:
+
+👉 “Let’s finish Chapter 5”
+OR
+👉 “Prepare me for viva”
+
+We close this properly.
+
+
+Let's make the frontend. Tell me what languages we will use
+
+Good. Now we move from “assignment” to actual project.
+
+But before jumping into tools, here’s the reality check:
+
+👉 If you overbuild the frontend, you’ll waste time
+👉 If you underbuild it, your project looks weak
+
+So we go minimal but professional
+
+🔥 What You Actually Need (Not What You Think)
+Your frontend only needs to:
+
+Take user details
+
+Ask 10 questions
+
+Send responses to backend
+
+Show result (score + category)
+
+That’s it.
+
+🔥 Recommended Tech Stack (Don’t Deviate)
+✅ Frontend
+HTML → structure
+
+CSS → styling
+
+JavaScript → logic (form handling)
+
+👉 Simple, fast, no unnecessary complexity
+
+✅ Backend
+Python (you already planned this)
+
+Framework: Flask
+
+👉 Why Flask?
+
+Lightweight
+
+Easy MySQL integration
+
+Perfect for student + GitHub project
+
+✅ Database
+MySQL (already done)
+
+🔥 Final Architecture
+Frontend (HTML/CSS/JS)
+        ↓
+Flask Backend (Python)
+        ↓
+MySQL Database
+🔥 What You SHOULD NOT Use (Don’t Get Fancy)
+❌ React (overkill for now)
+❌ Node.js (you already chose Python)
+❌ Django (too heavy)
+
+🔥 Folder Upgrade (Make It Professional)
+Update your repo:
+
+mental-health-dbms/
+│
+├── src/
+│   ├── app.py
+│   ├── routes/
+│   ├── models/
+│
+├── templates/        → HTML (Flask requirement)
+├── static/
+│   ├── css/
+│   ├── js/
+│
+├── database/
+├── results/
+├── docs/
+🔥 What Your Frontend Will Look Like
+Page 1: User Info
+Name
+
+Email
+
+Page 2: Questions (10)
+Radio buttons (1–5 scale)
+
+Page 3: Result
+Total Score
+
+Category (from DB)
+
+🔥 Brutal Truth
+Most students:
+
+Make ugly forms
+
+No backend connection
+
+Fake outputs
+
+You:
+👉 Will have real DB + real logic + real result
+
+That’s interview-level.
+
+🔥 Next Step (Execution Mode)
+We build this step-by-step.
+
+Tell me:
+
+👉 “Start frontend UI”
+OR
+👉 “Start backend (Flask setup first)”
+
+Don’t try to do both at once.
+
+
+My file has a frontend right now. It is only the index page. It is made out of html, css and js. 
+Update the README now
+
+Good. This is exactly how you level up your repo—from “assignment dump” to something that actually looks engineered.
+
+I’ll give you a clean, professional README. You just paste this into your repo and tweak names if needed.
+
+🔥 FINAL README (Use This)
+# 🧠 Mental Health Analyzer (DBMS Project)
+
+## 📌 Overview
+This project is a database-driven mental health assessment system that collects user responses to a set of questions, calculates a total score, and classifies the user's mental health status using predefined reference data.
+
+The system demonstrates core DBMS concepts along with a functional frontend and backend integration.
+
+---
+
+## 🚀 Features
+- User registration and assessment tracking
+- 10-question mental health evaluation system
+- Automatic score calculation using SQL Trigger
+- Classification of mental health status using reference dataset
+- Implementation of advanced DBMS concepts:
+  - Constraints
+  - Aggregate Functions
+  - Set Operations
+  - Joins
+  - Subqueries
+  - Views
+  - Triggers
+  - Stored Procedures
+  - Cursors
+- Frontend interface for user interaction
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- HTML
+- CSS
+- JavaScript
+
+### Backend
+- Python (Flask - planned / in progress)
+
+### Database
+- MySQL
+
+---
+
+## 📂 Project Structure
+mental-health-dbms/
+│
+├── src/ # Python backend
+│ └── app.py
+│
+├── templates/ # HTML files (frontend)
+│ └── index.html
+│
+├── static/ # CSS and JS
+│ ├── css/
+│ └── js/
+│
+├── database/
+│ ├── schema/ # DDL scripts
+│ ├── data/ # Insert data
+│ ├── queries/ # Week 4–6 SQL queries
+│ ├── triggers/
+│ ├── procedures/
+│
+├── docs/ # Report (Chapters 1–3)
+├── results/ # Screenshots of outputs
+│
+└── README.md
+
+
+---
+
+## ⚙️ How to Run
+
+### 1. Setup Database
+- Open MySQL Workbench
+- Run:
+  - `schema.sql`
+  - `insert_data.sql`
+
+---
+
+### 2. Run SQL Features
+- Execute queries from:
+  - `week4.sql`
+  - `week5.sql`
+  - `week6.sql`
+- Run trigger and procedures
+
+---
+
+### 3. Run Frontend
+- Open `index.html` in browser
+
+---
+
+### 4. (Optional - In Progress)
+- Run Python backend:
+```bash
+python src/app.py
+📊 Sample Workflow
+User enters details on frontend
+
+Answers 10 questions
+
+Responses stored in database
+
+Trigger calculates total score
+
+System maps score to mental health category
+
+Result displayed to user
+
+🎯 Academic Coverage (Review 2)
+Week 4:
+
+Aggregate Functions
+
+Constraints
+
+Set Operations
+
+Week 5:
+
+Joins
+
+Subqueries
+
+Views
+
+Week 6:
+
+Triggers
+
+Stored Procedures
+
+Cursors
+
+Exception Handling
+
+📸 Results
+Screenshots of query outputs and execution are available in the results/ folder.
+
+⚠️ Disclaimer
+This project is for academic purposes only and does not provide real medical or psychological diagnosis.
+
+👩‍💻 Author
+Your Name
+
+
+---
+
+# 🔥 Brutal Feedback on Your Current State
+
+Right now:
+- You have **good backend DB work** ✅  
+- You have **basic frontend** ✅  
+- You are missing:
+  - Backend connection (Flask)
+  - Real data flow
+
+👉 That’s the gap between:
+- “Good college project”
+- “Impressive GitHub project”
+
+---
+
+# 🔥 Next Move (Important Decision)
+
+Now choose:
+
+👉 **1. Connect frontend → database (Flask backend)** ← HIGH VALUE  
+👉 2. Improve UI (low impact)  
+👉 3. Add authentication (overkill right now)
+
+---
+
+If you want this to actually help in interviews:
+
+👉 Say: **“Start Flask integration”**
+
+That’s where your project becomes real.
+
+https://github.com/Dia-Garg/Mental_health_analyser
+This is the project right now and I don't want a very very long readme. It should define everything but it should not be at a point where a person does not want to read anymore
+
+Good instinct. A bloated README kills interest. You want tight + informative + skimmable.
+
+Here’s a clean, sharp version—no fluff, but still complete.
+
+🔥 USE THIS README
+# 🧠 Mental Health Analyzer
+
+A DBMS-based system that evaluates user responses to mental health questions, calculates a score, and classifies mental health status using predefined reference data.
+
+---
+
+## 🚀 Features
+- 10-question assessment system  
+- Automatic score calculation using SQL Trigger  
+- Mental health classification using score ranges  
+- Demonstrates core DBMS concepts:
+  - Constraints, Aggregate Functions, Set Operations  
+  - Joins, Subqueries, Views  
+  - Triggers, Stored Procedures, Cursors  
+
+---
+
+## 🛠️ Tech Stack
+- Frontend: HTML, CSS, JavaScript  
+- Backend: Python (Flask - in progress)  
+- Database: MySQL  
+
+---
+
+## 📂 Structure
+mental-health-dbms/
+├── src/ # Backend (Python)
+├── templates/ # HTML files
+├── static/ # CSS / JS
+├── database/ # SQL scripts
+├── docs/ # Report
+├── results/ # Outputs
+
+
+---
+
+## ⚙️ How to Run
+1. Run `schema.sql` and `insert_data.sql` in MySQL  
+2. Execute queries from `database/queries/`  
+3. Open `index.html` in browser  
+
+---
+
+## 📊 Workflow
+User → Answers Questions → Data Stored → Trigger Calculates Score → Result Classified
+
+---
+
+## ⚠️ Note
+For academic use only. Not a medical diagnosis tool.
+
+---
+
+## 👩‍💻 Author
+Dia Garg
+🔥 Why This Works
+Short enough to read in 20–30 seconds
+
+Still shows:
+
+DBMS concepts (important for reviewers)
+
+Project structure (important for GitHub)
+
+Functionality (important for understanding)
+
+⚠️ Brutal Truth
+Your README should:
+
+Invite someone in
+Not
+
+Scare them away with walls of text
+
+This version does that.
+
+🔥 Next Step
+Now you’re at the point where your project looks legit.
+
+Say:
+
+👉 “Start Flask integration”
+
+That’s the upgrade from:
+good project → impressive project
+
+
+https://github.com/Dia-Garg/Mental_health_analyser
+I have completed my front end. Now give me a updated readme for this.
+
+Good. Now your project has frontend + DB + structure, so your README should reflect that—but still stay sharp.
+
+Here’s your final upgraded, clean README 👇 (balanced, not bloated)
+
+🔥 UPDATED README (Frontend Included)
+# 🧠 Mental Health Analyzer
+
+A DBMS-based web application that evaluates user responses to mental health questions, calculates a score, and classifies mental health status using predefined reference data.
+
+---
+
+## 🚀 Features
+- Interactive frontend for user input (10-question assessment)
+- Automatic score calculation using SQL Trigger
+- Mental health classification using score ranges
+- Demonstrates core DBMS concepts:
+  - Constraints, Aggregate Functions, Set Operations  
+  - Joins, Subqueries, Views  
+  - Triggers, Stored Procedures, Cursors  
+
+---
+
+## 🛠️ Tech Stack
+- **Frontend:** HTML, CSS, JavaScript  
+- **Backend:** Python (Flask - in progress)  
+- **Database:** MySQL  
+
+---
+
+## 📂 Project Structure
+mental-health-dbms/
+├── src/ # Backend (Python)
+├── templates/ # HTML (Frontend pages)
+├── static/ # CSS / JS
+├── database/ # SQL scripts (schema, queries, triggers)
+├── docs/ # Report
+├── results/ # Query outputs & screenshots
+
+
+---
+
+## ⚙️ How to Run
+
+### 1. Setup Database
+- Run `schema.sql`
+- Run `insert_data.sql`
+
+### 2. Run Frontend
+- Open `index.html` in browser  
+- Fill user details and answer questions  
+
+### 3. (In Progress)
+- Backend integration using Flask to connect frontend with database
+
+---
+
+## 📊 Workflow
+User → Frontend Form → Responses Stored → Trigger Calculates Score → Result Classified
+
+---
+
+## 📌 Status
+- ✅ Database design & queries completed  
+- ✅ Frontend UI completed  
+- 🔄 Backend integration in progress  
+
+---
+
+## ⚠️ Disclaimer
+This project is for academic purposes only and does not provide medical diagnosis.
+
+---
+
+## 👩‍💻 Author
+Dia Garg
+🔥 Why This Version Is Better
+Mentions frontend explicitly (important now)
+
+Shows project status → very professional touch
+
+Still readable in < 30 seconds
+
+Makes your repo look actively developed, not finished-and-dead
+
+⚠️ Brutal Feedback
+Right now your project is:
+
+Strong DBMS project ✅
+
+Good UI layer ✅
+
+Missing real integration ❌
+
+👉 That’s the only thing stopping this from being impressive
+
+🔥 Next Move (This is the real upgrade)
+Now you decide:
+
+👉 “Connect frontend → Flask → MySQL”
+
+That’s where your project becomes:
+
+Demo-worthy
+
+Resume-worthy
+
+Interview-worthy
+
+Say the word and I’ll walk you through that step-by-step.
+
+
+https://github.com/Dia-Garg/Mental_health_analyser/tree/main/src
+
+These have my frontend and backend codes. When entering the data in the frontend it is not showing in the backend or in sql
+
+Good. Now we stop guessing and fix this like engineers.
+
+Your issue is almost certainly this:
+
+Your frontend is NOT actually connected to your Flask backend,
+so data never reaches Python → never reaches MySQL.
+
+Right now you likely have:
+
+HTML form ✅
+
+Flask app exists ✅
+
+But no proper API connection between them ❌
+
+🔥 First — Understand the Flow (This is where you’re breaking)
+Correct flow should be:
+
+HTML Form → (POST request) → Flask → MySQL
+Right now yours is probably:
+
+HTML Form → nothing happens ❌
+🔍 Step 1 — Check Your Form (CRITICAL)
+Open your HTML.
+
+Look for <form> tag.
+
+❌ If you see something like:
+<form>
+👉 That’s wrong.
+
+✅ It MUST be:
+<form action="/submit" method="POST">
+🔍 Step 2 — Check Flask Route
+In your app.py, you MUST have something like:
+
+from flask import Flask, request, redirect
+import mysql.connector
+
+app = Flask(__name__)
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    name = request.form['user_name']
+    email = request.form['user_email']
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="yourpassword",
+        database="mental_health_tracker"
+    )
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "INSERT INTO users (user_name, user_email) VALUES (%s, %s)",
+        (name, email)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return "Data inserted successfully"
+🔍 Step 3 — Check Input Names (MOST COMMON BUG)
+Your HTML inputs must match Flask keys.
+
+Example:
+HTML:
+<input type="text" name="user_name">
+<input type="email" name="user_email">
+Flask:
+request.form['user_name']
+request.form['user_email']
+👉 If names don’t match → data = NULL
+
+🔍 Step 4 — How Are You Running It?
+❌ If you are opening HTML like this:
+double click → open in browser
+👉 WRONG
+
+Flask is not involved.
+
+✅ You MUST run:
+python app.py
+Then open:
+
+http://127.0.0.1:5000/
+🔥 Step 5 — Debug Like a Pro
+Add this in Flask:
+
+print(request.form)
+Now submit form.
+
+👉 If nothing prints → frontend not connected
+👉 If prints but DB empty → DB issue
+👉 If error → we fix
+
+🔥 Most Likely Your Problem (90% probability)
+You are:
+
+Opening index.html directly ❌
+
+Not using Flask route ❌
+
+🔥 Quick Fix Plan (Do This EXACTLY)
+Add action="/submit" in form
+
+Add Flask /submit route
+
+Run Flask (python app.py)
+
+Open via localhost
+
+Submit form
+
+Check MySQL:
+
+SELECT * FROM users;
+⚠️ Brutal Truth
+Right now your project is:
+
+Frontend (isolated) ❌
+
+Backend (isolated) ❌
+
+DB (isolated) ❌
+
+👉 You don’t have a “system” yet
+
+We fix that NOW.
+
+🔥 Your Next Move
+Send me:
+
+👉 Your index.html form part
+👉 Your app.py
+
+I’ll pinpoint the exact bug in 1 shot.
+
+
+I will share with u all my code links: 
+Go through the links and help me connect python and sql and frontend to backend
+
+https://github.com/Dia-Garg/Mental_health_analyser/blob/main/src/Backend/app.py
+https://github.com/Dia-Garg/Mental_health_analyser/blob/main/src/Frontend/templates/index.html
+https://github.com/Dia-Garg/Mental_health_analyser/blob/main/src/Frontend/templates/Questionnaire.html
+https://github.com/Dia-Garg/Mental_health_analyser/blob/main/src/Frontend/templates/admin.html
+https://github.com/Dia-Garg/Mental_health_analyser/blob/main/src/Frontend/templates/result.html
+https://github.com/Dia-Garg/Mental_health_analyser/blob/main/src/Frontend/static/css/style.css
+https://github.com/Dia-Garg/Mental_health_analyser/blob/main/src/Frontend/static/js/Questionnaire.js
+https://github.com/Dia-Garg/Mental_health_analyser/blob/main/src/Frontend/static/js/admin.js
+https://github.com/Dia-Garg/Mental_health_analyser/blob/main/src/Frontend/static/js/main.js
+https://github.com/Dia-Garg/Mental_health_analyser/blob/main/src/Frontend/static/js/result.js
+
+
+Help me make this code successful, if there is any files to remove tell me that aswell, also, I want to understand the code I have written so once after we connect everything and it starts working properly, teach me everything
+
+Good—you did the hard part: you built pieces.
+Now we turn it into an actual working system.
+
+I’m going to be blunt:
+👉 Your issue is architecture mismatch
+Your frontend is acting like a static website, not a Flask-powered app.
+
+We fix that in 3 surgical steps. No guessing.
+
+🔥 PROBLEM SUMMARY (After reviewing your structure)
+You currently have:
+
+Flask backend (app.py) ✅
+
+HTML pages in src/Frontend/templates ❌ (wrong place)
+
+JS handling logic locally ❌
+
+No proper API calls ❌
+
+👉 Result:
+Frontend never talks to backend → backend never talks to MySQL
+
+🔥 STEP 1 — FIX PROJECT STRUCTURE (NON-NEGOTIABLE)
+Flask has strict rules.
+
+❌ Your current structure:
+src/
+ ├── Backend/
+ ├── Frontend/templates/
+ ├── Frontend/static/
+👉 This WILL break Flask rendering.
+
+✅ FIX IT TO THIS:
+Move folders:
+
+src/
+├── app.py
+├── templates/
+│   ├── index.html
+│   ├── Questionnaire.html
+│   ├── result.html
+│   ├── admin.html
+│
+├── static/
+│   ├── css/
+│   ├── js/
+🔥 ACTION
+👉 Move:
+
+Frontend/templates/* → templates/
+
+Frontend/static/* → static/
+
+Move app.py to src/
+
+👉 Delete empty Frontend/ and Backend/ folders after moving
+
+🔥 STEP 2 — FIX FLASK ROUTING
+Your Flask must serve pages.
+
+✅ Replace your app.py with THIS CLEAN VERSION
+from flask import Flask, render_template, request, redirect
+import mysql.connector
+
+app = Flask(__name__)
+
+# DB connection
+def get_db_connection():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="yourpassword",
+        database="mental_health_tracker"
+    )
+
+# Home page
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+# Questionnaire page
+@app.route('/questions')
+def questions():
+    return render_template('Questionnaire.html')
+
+# Submit form
+@app.route('/submit', methods=['POST'])
+def submit():
+    name = request.form['user_name']
+    email = request.form['user_email']
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Insert user
+    cursor.execute(
+        "INSERT INTO users (user_name, user_email) VALUES (%s, %s)",
+        (name, email)
+    )
+    user_id = cursor.lastrowid
+
+    # Create assessment
+    cursor.execute(
+        "INSERT INTO assessments (user_id) VALUES (%s)",
+        (user_id,)
+    )
+    assessment_id = cursor.lastrowid
+
+    # Insert responses (assuming 10 questions)
+    total_score = 0
+    for i in range(1, 11):
+        score = int(request.form[f'q{i}'])
+        total_score += score
+
+        cursor.execute(
+            "INSERT INTO responses (assessment_id, question_id, score) VALUES (%s, %s, %s)",
+            (assessment_id, i, score)
+        )
+
+    conn.commit()
+
+    # Fetch result
+    cursor.execute("""
+        SELECT status_category 
+        FROM mental_health_reference
+        WHERE %s BETWEEN score_range_min AND score_range_max
+    """, (total_score,))
+    
+    result = cursor.fetchone()[0]
+
+    conn.close()
+
+    return render_template('result.html', score=total_score, result=result)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+🔥 STEP 3 — FIX YOUR HTML (CRITICAL)
+In index.html
+Make sure form starts like:
+
+<form action="/submit" method="POST">
+Input fields MUST match:
+<input type="text" name="user_name">
+<input type="email" name="user_email">
+In Questionnaire.html
+Each question MUST be:
+
+<input type="radio" name="q1" value="1">
+<input type="radio" name="q1" value="2">
+...
+👉 Up to q10
+
+🔥 STEP 4 — REMOVE THIS (IMPORTANT)
+Delete or ignore:
+
+JS logic that calculates score ❌
+
+Any fetch() or fake logic ❌
+
+👉 Why?
+Backend must control:
+
+score
+
+DB insert
+
+result
+
+🔥 STEP 5 — RUN SYSTEM (FINAL TEST)
+Run:
+python app.py
+Open:
+
+http://127.0.0.1:5000/
+Flow:
+Enter name/email
+
+Answer questions
+
+Submit
+
+See result page
+
+Verify DB:
+SELECT * FROM users;
+SELECT * FROM responses;
+SELECT * FROM assessments;
+🔥 IF THIS DOESN’T WORK
+Tell me:
+
+What error shows in terminal
+
+What happens after clicking submit
+
+I’ll debug instantly.
+
+🔥 Brutal Truth
+Before:
+
+You had components
+
+After this:
+
+You have a system
+
+🔥 NEXT STEP (IMPORTANT)
+Once this works:
+
+👉 I will:
+
+Explain your entire code line-by-line
+
+Prepare you for viva on this
+
+Help you make this interview-ready
+
+🔥 Your Task
+Do this EXACTLY.
+
+Then reply:
+
+👉 “System working”
+OR
+👉 paste error
+
+No shortcuts.
+
+
+Tell me exactly what to do in the HTML files like I did understand what to add but I don't know where to add. Also, steps to rin the python file.
+
+Good—you’re asking the right thing now. This is where most people mess up: they know WHAT, not WHERE.
+
+I’ll walk you file-by-file. No ambiguity.
+
+🔥 FIRST — HOW YOUR FLOW SHOULD WORK
+You have 2 pages:
+
+index.html → collects name + email
+
+Questionnaire.html → collects answers
+
+👉 So:
+
+index.html → Questionnaire.html → Flask (/submit)
+🔥 STEP 1 — FIX index.html
+👉 Open:
+templates/index.html
+✅ FIND your <form> tag
+Replace it with:
+
+<form action="/questions" method="GET">
+✅ Inside form, make sure inputs look like:
+<input type="text" name="user_name" required>
+<input type="email" name="user_email" required>
+✅ ADD THIS (IMPORTANT — hidden inputs pass data forward)
+Right before closing </form>:
+
+<input type="hidden" name="user_name" id="hidden_name">
+<input type="hidden" name="user_email" id="hidden_email">
+✅ ADD THIS JS (at bottom of file)
+<script>
+document.querySelector("form").addEventListener("submit", function() {
+    document.getElementById("hidden_name").value =
+        document.querySelector('input[name="user_name"]').value;
+
+    document.getElementById("hidden_email").value =
+        document.querySelector('input[name="user_email"]').value;
+});
+</script>
+🔥 STEP 2 — FIX Questionnaire.html
+👉 Open:
+templates/Questionnaire.html
+✅ CHANGE form tag:
+<form action="/submit" method="POST">
+✅ ADD THESE HIDDEN FIELDS (TOP of form)
+<input type="hidden" name="user_name" value="{{ request.args.get('user_name') }}">
+<input type="hidden" name="user_email" value="{{ request.args.get('user_email') }}">
+✅ FOR EACH QUESTION
+You MUST have:
+
+<p>Question 1</p>
+<input type="radio" name="q1" value="1" required>1
+<input type="radio" name="q1" value="2">2
+<input type="radio" name="q1" value="3">3
+<input type="radio" name="q1" value="4">4
+<input type="radio" name="q1" value="5">5
+👉 Repeat for:
+
+q1, q2, q3 ... q10
+🔥 STEP 3 — FIX result.html
+👉 Open:
+templates/result.html
+✅ ADD THIS WHERE YOU WANT OUTPUT:
+<h2>Your Score: {{ score }}</h2>
+<h2>Result: {{ result }}</h2>
+🔥 STEP 4 — VERY IMPORTANT (REMOVE CONFLICTS)
+❌ REMOVE / IGNORE:
+JS that calculates score
+
+JS that stores answers locally
+
+Any fake result logic
+
+👉 Your backend handles everything now
+
+🔥 STEP 5 — HOW TO RUN PYTHON (THIS IS WHERE YOU FAILED BEFORE)
+👉 Go to your project folder
+Open terminal in:
+
+src/
+✅ Run:
+python app.py
+✅ You will see:
+Running on http://127.0.0.1:5000/
+👉 Open browser:
+http://127.0.0.1:5000/
+🔥 STEP 6 — TEST FLOW
+Enter name/email
+
+Submit → goes to questionnaire
+
+Answer questions
+
+Submit
+
+Result page appears
+
+🔥 STEP 7 — VERIFY DATABASE
+Run:
+
+SELECT * FROM users;
+SELECT * FROM responses;
+SELECT * FROM assessments;
+⚠️ MOST COMMON ERRORS (YOU WILL HIT ONE)
+❌ Error: KeyError 'q1'
+👉 You didn’t name inputs correctly
+
+❌ Page not found
+👉 Wrong action="/submit"
+
+❌ Data not in DB
+👉 Flask not running OR wrong password
+
+🔥 Brutal Truth
+Right now:
+
+Your frontend was just UI
+
+After this → it becomes a real system
+
+🔥 Your Task
+Do exactly this.
+
+Then tell me:
+
+👉 “Flow working”
+OR
+👉 send screenshot/error
+
+Then I’ll:
+
+debug
+
+explain everything for viva
+
+make this interview-ready
+
+
+I am sending the exact index.html code, either u edit it and give me or tell me the line that needs to be edited
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindCheck — Mental Health Analyser</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../static/css/style.css" />
+  <!-- If opening directly in browser (no server), use the line below instead and comment out the one above -->
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+</head>
+<body>
+ 
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">
+      <span class="dot"></span>MindCheck
+    </a>
+    <ul class="nav-links">
+      <li class="hide-mobile"><a href="#how">How it works</a></li>
+      <li><a href="questionnaire.html" class="nav-cta">Take the test</a></li>
+    </ul>
+  </nav>
+ 
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-badge"><span></span>Academic Research Project</div>
+      <h1 class="hero-title">
+        How are you <em>really</em><br>feeling today?
+      </h1>
+      <p class="hero-subtitle">
+        Answer 10 simple questions about your daily well-being. Our system analyses your responses and provides a personalised mental health snapshot — in under 3 minutes.
+      </p>
+      <div class="hero-actions">
+        <a href="questionnaire.html" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+          Start assessment
+        </a>
+        <a href="#how" class="btn-ghost">Learn how it works</a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Anonymous &amp; secure
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Under 3 minutes
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Not a medical tool
+        </div>
+      </div>
+    </div>
+ 
+ 
+  </section>
+ 
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="section-label">Process</div>
+    <h2 class="section-title">Three steps to clarity</h2>
+    <p class="section-sub">No sign-ups. No complexity. Just honest answers and a clear picture of where you stand.</p>
+ 
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-number">01</div>
+        <div class="how-chip chip-terra">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </div>
+        <h3>Answer 10 questions</h3>
+        <p>Each question explores a different dimension of your mental well-being — stress, sleep, mood, and more. Simple, honest options. No right or wrong answers.</p>
+      </div>
+ 
+      <div class="how-card">
+        <div class="how-number">02</div>
+        <div class="how-chip chip-sage">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        </div>
+        <h3>We analyse your responses</h3>
+        <p>Your answers are processed by our system. Each response is weighed against established well-being indicators to build an accurate picture.</p>
+      </div>
+ 
+      <div class="how-card">
+        <div class="how-number">03</div>
+        <div class="how-chip chip-warm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <h3>See your result</h3>
+        <p>You receive a clear mental health snapshot with context — what it means for you and what steps you can consider going forward.</p>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ANSWER HONESTLY -->
+  <section class="section" style="max-width: 640px; margin: 0 auto; padding-top: 0;">
+    <div class="honesty-card">
+      <div class="honesty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      </div>
+      <h3>Answer honestly</h3>
+      <p>This tool works best when you reflect genuinely. Your responses are private and used only to generate your personal result. There is nothing to gain from choosing any particular answer.</p>
+      <ul class="honesty-list">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          Take your time with each question
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          Go with your first instinct
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          Think about the past two weeks
+        </li>
+      </ul>
+    </div>
+    <div class="disclaimer" style="margin-top: 1.25rem;">
+      <strong>Academic project notice:</strong> MindCheck is built as a DBMS academic project. It is not a clinical tool and does not replace professional mental health evaluation. If you are experiencing distress, please consult a qualified mental health professional.
+    </div>
+  </section>
+ 
+  <!-- CTA STRIP -->
+  <section class="cta-strip">
+    <h2>Ready to check in with <em>yourself?</em></h2>
+    <p>It takes 3 minutes. No account needed. Your responses stay private.</p>
+    <a href="questionnaire.html" class="btn-primary btn-large">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+      Begin assessment
+    </a>
+  </section>
+ 
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">MindCheck</span>
+    <p>Built as a DBMS project &mdash; <a href="https://github.com/Dia-Garg/Mental_health_analyser" target="_blank">View on GitHub</a></p>
+    <p>Not a medical diagnostic tool &mdash; for academic use only</p>
+  </footer>
+ 
+  <script src="../static/js/main.js"></script>
+</body>
+</html>
+
+Good — your UI is actually solid. The problem is it’s behaving like a static website, not a Flask app.
+
+I’m not going to rewrite everything. I’ll give you exact surgical edits.
+
+🔥 WHAT YOU MUST CHANGE (ONLY 3 THINGS)
+✅ 1. FIX ALL LINKS (CRITICAL)
+Right now you have:
+
+href="questionnaire.html"
+👉 This bypasses Flask completely ❌
+
+🔥 REPLACE ALL 3 INSTANCES
+❌ Find these (3 places):
+<a href="questionnaire.html" class="nav-cta">
+<a href="questionnaire.html" class="btn-primary">
+<a href="questionnaire.html" class="btn-primary btn-large">
+✅ Replace with:
+<a href="/questions" class="nav-cta">
+<a href="/questions" class="btn-primary">
+<a href="/questions" class="btn-primary btn-large">
+👉 This connects your frontend → Flask route /questions
+
+✅ 2. FIX CSS & JS PATHS (IMPORTANT)
+Right now:
+
+<link rel="stylesheet" href="../static/css/style.css" />
+<script src="../static/js/main.js"></script>
+👉 This works only when opening directly ❌
+👉 Breaks in Flask ❌
+
+🔥 REPLACE WITH:
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+AND
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+✅ 3. FIX LOGO LINK
+Right now:
+
+<a href="index.html" class="nav-logo">
+👉 Replace:
+
+<a href="/" class="nav-logo">
+⚠️ THAT’S IT — DO NOT TOUCH ANYTHING ELSE
+You don’t need:
+
+forms here ❌
+
+hidden inputs ❌
+
+JS changes ❌
+
+👉 This page is just a landing page
+
+🔥 WHY YOUR CURRENT VERSION FAILS
+Right now:
+
+Click → questionnaire.html → opens file directly ❌
+After fix:
+
+Click → /questions → Flask → renders page ✅
+🔥 AFTER THIS — DO THIS TEST
+Run:
+
+python app.py
+Open:
+
+http://127.0.0.1:5000/
+Click Start assessment
+
+👉 If it goes to:
+
+http://127.0.0.1:5000/questions
+✅ You fixed it
+
+⚠️ NEXT PROBLEM (COMING)
+After this works, next failure will be:
+👉 Questionnaire not submitting properly
+
+We fix that next.
+
+🔥 YOUR TASK
+Make these exact replacements.
+
+Then tell me:
+
+👉 “Index fixed”
+
+Next I’ll fix:
+👉 Questionnaire.html (this is where DB connection actually happens)
+
+
+Index fixed, now I'm sending the questionnaire page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assessment — MindCheck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../static/css/style.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">
+      <span class="dot"></span>MindCheck
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">← Back to home</a></li>
+    </ul>
+  </nav>
+
+  <!-- QUESTIONNAIRE -->
+  <main class="quiz-page">
+
+    <div class="quiz-header">
+      <h1>Mental Health Assessment</h1>
+      <p>Answer each question honestly based on how you have been feeling over the past two weeks.</p>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-info">
+        <span id="progress-label">Question 1 of 11</span>
+        <span id="progress-percent">0% complete</span>
+      </div>
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- STEP 0: USER INFO -->
+    <div class="quiz-step" id="step-0">
+      <div class="user-info-section">
+        <h2>Before we begin</h2>
+        <div class="form-group">
+          <label for="user-name">Your name</label>
+          <input type="text" id="user-name" placeholder="e.g. Ananya Iyer" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="user-email">Email address</label>
+          <input type="email" id="user-email" placeholder="e.g. ananya@example.com" autocomplete="off" />
+        </div>
+        <div id="info-error" class="field-error" style="display:none;">Please fill in both fields to continue.</div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-primary" onclick="startQuiz()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+          Begin assessment
+        </button>
+      </div>
+    </div>
+
+    <!-- STEPS 1–10: QUESTIONS -->
+    <div id="questions-container"></div>
+
+    <!-- SUBMIT -->
+    <div class="quiz-submit" id="submit-section" style="display:none;">
+      <div class="disclaimer" style="max-width:520px; margin: 0 auto 2rem; text-align:left;">
+        <strong>Before you submit:</strong> Make sure all your answers reflect how you have genuinely been feeling. Your result is based entirely on your responses.
+      </div>
+      <button class="btn-primary btn-large" onclick="submitQuiz()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        See my result
+      </button>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">MindCheck</span>
+    <p>Built as a DBMS project &mdash; <a href="https://github.com/Dia-Garg/Mental_health_analyser" target="_blank">View on GitHub</a></p>
+    <p>Not a medical diagnostic tool &mdash; for academic use only</p>
+  </footer>
+
+  <script src="../static/js/main.js"></script>
+  <script src="../static/js/questionnaire.js"></script>
+</body>
+</html>
+
+Good. This is where your system is actually breaking.
+
+👉 Brutal truth:
+Your current Questionnaire.html is 100% frontend-driven (JS)
+👉 Flask NEVER receives anything → so DB stays empty.
+
+We’re going to convert this into a real backend-connected form WITHOUT destroying your UI.
+
+🔥 CORE PROBLEM
+Right now:
+
+JS handles everything ❌
+Flask sees nothing ❌
+We fix by:
+
+HTML FORM → POST → Flask → MySQL ✅
+🔥 WHAT YOU WILL DO (VERY PRECISE)
+We are NOT rewriting everything.
+We are injecting backend connection cleanly.
+
+✅ STEP 1 — ADD FORM TAG (MOST IMPORTANT)
+🔍 FIND THIS:
+<main class="quiz-page">
+✅ RIGHT AFTER IT, ADD:
+<form action="/submit" method="POST">
+🔍 NOW FIND THIS (END OF PAGE):
+</main>
+✅ JUST BEFORE IT, ADD:
+</form>
+👉 Now your entire quiz is inside a form
+
+🔥 STEP 2 — FIX USER INPUT FIELDS
+🔍 FIND:
+<input type="text" id="user-name"
+<input type="email" id="user-email"
+✅ CHANGE TO:
+<input type="text" id="user-name" name="user_name" required>
+<input type="email" id="user-email" name="user_email" required>
+👉 Without name=, Flask gets NOTHING
+
+🔥 STEP 3 — FIX SUBMIT BUTTON
+🔍 FIND:
+<button class="btn-primary btn-large" onclick="submitQuiz()">
+✅ REPLACE WITH:
+<button type="submit" class="btn-primary btn-large">
+👉 Remove onclick="submitQuiz()" completely ❌
+
+🔥 STEP 4 — FIX JS CONFLICT (VERY IMPORTANT)
+Your JS (questionnaire.js) is:
+
+generating questions
+
+storing answers
+
+NOT sending to backend
+
+👉 That breaks everything.
+
+✅ TEMP FIX (DO THIS NOW)
+Comment this line:
+
+<script src="../static/js/questionnaire.js"></script>
+ALSO FIX PATHS:
+Replace:
+
+<script src="../static/js/main.js"></script>
+with:
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+🔥 STEP 5 — ADD SIMPLE QUESTIONS (REQUIRED)
+Right now your questions are JS-generated → Flask cannot read them.
+
+👉 You MUST add at least basic HTML questions.
+
+✅ ADD THIS inside <div id="questions-container">
+<div>
+  <p>1. How often have you felt stressed?</p>
+  <input type="radio" name="q1" value="1" required>1
+  <input type="radio" name="q1" value="2">2
+  <input type="radio" name="q1" value="3">3
+  <input type="radio" name="q1" value="4">4
+  <input type="radio" name="q1" value="5">5
+</div>
+👉 Repeat for:
+
+q1 → q10
+⚠️ HARD TRUTH
+Your fancy JS quiz:
+👉 looks good
+👉 but is useless for DBMS submission
+
+Because:
+
+Backend cannot read JS state
+
+🔥 STEP 6 — FIX NAV LINKS
+Replace:
+
+href="index.html"
+with:
+
+href="/"
+🔥 STEP 7 — RUN SYSTEM
+cd src
+python app.py
+Open:
+
+http://127.0.0.1:5000/
+🔥 TEST
+Go to quiz
+
+Enter name/email
+
+Select answers
+
+Submit
+
+✅ CHECK DB
+SELECT * FROM users;
+SELECT * FROM responses;
+⚠️ WHAT WILL BREAK NEXT
+Very likely:
+👉 result page not showing properly
+
+We fix that next.
+
+🔥 WHERE YOU STAND NOW
+Before:
+
+UI project ❌
+
+After this:
+
+Real DBMS system ✅
+
+🔥 YOUR MOVE
+Do this EXACTLY.
+
+Then reply:
+
+👉 “Form working”
+OR
+👉 send error screenshot
+
+Next step:
+👉 Fix result page + polish + viva mastery
+
+
+I am sending the entire code: Fix the code and I liked the previous format where each question was in a different page so give the code according to that:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assessment — MindCheck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../static/css/style.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="/" class="nav-logo">
+      <span class="dot"></span>MindCheck
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">← Back to home</a></li>
+    </ul>
+  </nav>
+
+  <!-- QUESTIONNAIRE -->
+  <main class="quiz-page">
+    <form action="/submit" method="POST">
+
+    <div class="quiz-header">
+      <h1>Mental Health Assessment</h1>
+      <p>Answer each question honestly based on how you have been feeling over the past two weeks.</p>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-info">
+        <span id="progress-label">Question 1 of 11</span>
+        <span id="progress-percent">0% complete</span>
+      </div>
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- STEP 0: USER INFO -->
+    <div class="quiz-step" id="step-0">
+      <div class="user-info-section">
+        <h2>Before we begin</h2>
+        <div class="form-group">
+          <label for="user-name">Your name</label>
+          <input type="text" id="user-name" name="user_name" required placeholder="e.g. Ananya Iyer" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="user-email">Email address</label>
+          <input type="email" id="user-email" name="user_email" required placeholder="e.g. ananya@example.com" autocomplete="off" />
+        </div>
+        <div id="info-error" class="field-error" style="display:none;">Please fill in both fields to continue.</div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-primary" onclick="startQuiz()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+          Begin assessment
+        </button>
+      </div>
+    </div>
+
+    <!-- STEPS 1–10: QUESTIONS -->
+    <div>
+  <p>1. How often have you felt stressed?</p>
+  <input type="radio" name="q1" value="1" required>1
+  <input type="radio" name="q1" value="2">2
+  <input type="radio" name="q1" value="3">3
+  <input type="radio" name="q1" value="4">4
+  <input type="radio" name="q1" value="5">5
+</div>
+    <div>
+  <p>2. How often have you felt stressed?</p>
+  <input type="radio" name="q1" value="1" required>1
+  <input type="radio" name="q1" value="2">2
+  <input type="radio" name="q1" value="3">3
+  <input type="radio" name="q1" value="4">4
+  <input type="radio" name="q1" value="5">5
+</div>
+    <div>
+  <p>3. How often have you felt stressed?</p>
+  <input type="radio" name="q1" value="1" required>1
+  <input type="radio" name="q1" value="2">2
+  <input type="radio" name="q1" value="3">3
+  <input type="radio" name="q1" value="4">4
+  <input type="radio" name="q1" value="5">5
+</div>
+    <div>
+  <p>4. How often have you felt stressed?</p>
+  <input type="radio" name="q1" value="1" required>1
+  <input type="radio" name="q1" value="2">2
+  <input type="radio" name="q1" value="3">3
+  <input type="radio" name="q1" value="4">4
+  <input type="radio" name="q1" value="5">5
+</div>
+    <div>
+  <p>5. How often have you felt stressed?</p>
+  <input type="radio" name="q1" value="1" required>1
+  <input type="radio" name="q1" value="2">2
+  <input type="radio" name="q1" value="3">3
+  <input type="radio" name="q1" value="4">4
+  <input type="radio" name="q1" value="5">5
+</div>
+    <div>
+  <p>6. How often have you felt stressed?</p>
+  <input type="radio" name="q1" value="1" required>1
+  <input type="radio" name="q1" value="2">2
+  <input type="radio" name="q1" value="3">3
+  <input type="radio" name="q1" value="4">4
+  <input type="radio" name="q1" value="5">5
+</div>
+    <div>
+  <p>7. How often have you felt stressed?</p>
+  <input type="radio" name="q1" value="1" required>1
+  <input type="radio" name="q1" value="2">2
+  <input type="radio" name="q1" value="3">3
+  <input type="radio" name="q1" value="4">4
+  <input type="radio" name="q1" value="5">5
+</div>
+    <div>
+  <p>8. How often have you felt stressed?</p>
+  <input type="radio" name="q1" value="1" required>1
+  <input type="radio" name="q1" value="2">2
+  <input type="radio" name="q1" value="3">3
+  <input type="radio" name="q1" value="4">4
+  <input type="radio" name="q1" value="5">5
+</div>
+    <div>
+  <p>9. How often have you felt stressed?</p>
+  <input type="radio" name="q1" value="1" required>1
+  <input type="radio" name="q1" value="2">2
+  <input type="radio" name="q1" value="3">3
+  <input type="radio" name="q1" value="4">4
+  <input type="radio" name="q1" value="5">5
+</div>
+    <div>
+  <p>10. How often have you felt stressed?</p>
+  <input type="radio" name="q1" value="1" required>1
+  <input type="radio" name="q1" value="2">2
+  <input type="radio" name="q1" value="3">3
+  <input type="radio" name="q1" value="4">4
+  <input type="radio" name="q1" value="5">5
+</div>
+
+
+    <!-- SUBMIT -->
+    <div class="quiz-submit" id="submit-section" style="display:none;">
+      <div class="disclaimer" style="max-width:520px; margin: 0 auto 2rem; text-align:left;">
+        <strong>Before you submit:</strong> Make sure all your answers reflect how you have genuinely been feeling. Your result is based entirely on your responses.
+      </div>
+      <button type="submit" class="btn-primary btn-large">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        See my result
+      </button>
+    </div>
+    </form>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">MindCheck</span>
+    <p>Built as a DBMS project &mdash; <a href="https://github.com/Dia-Garg/Mental_health_analyser" target="_blank">View on GitHub</a></p>
+    <p>Not a medical diagnostic tool &mdash; for academic use only</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <!-- script src="../static/js/questionnaire.js"></script -->
+</body>
+</html>
+
+
+Good—you’re very close, but right now your code is logically broken even if it looks fine.
+
+I’m going to fix it properly + keep your multi-step (one-question-at-a-time) UI.
+
+🔥 CRITICAL PROBLEMS IN YOUR CURRENT CODE
+❌ All questions use name="q1" → Flask only gets ONE answer
+
+❌ All questions visible at once → breaks your step UI
+
+❌ JS removed → step navigation broken
+
+❌ Submit section hidden → form never submits
+
+🔥 WHAT WE WILL DO
+👉 Keep your step-by-step UI
+👉 Keep your design
+👉 Make it Flask-compatible
+
+✅ FINAL FIXED CODE (USE THIS)
+Replace your entire questions section with this:
+
+<!-- STEP 1 -->
+<div class="quiz-step active">
+  <p>1. How often have you felt stressed?</p>
+  <input type="radio" name="q1" value="1" required>1
+  <input type="radio" name="q1" value="2">2
+  <input type="radio" name="q1" value="3">3
+  <input type="radio" name="q1" value="4">4
+  <input type="radio" name="q1" value="5">5
+  <br><br>
+  <button type="button" onclick="nextStep()">Next</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="quiz-step">
+  <p>2. How often have you felt anxious?</p>
+  <input type="radio" name="q2" value="1" required>1
+  <input type="radio" name="q2" value="2">2
+  <input type="radio" name="q2" value="3">3
+  <input type="radio" name="q2" value="4">4
+  <input type="radio" name="q2" value="5">5
+  <br><br>
+  <button type="button" onclick="nextStep()">Next</button>
+</div>
+
+<!-- STEP 3 -->
+<div class="quiz-step">
+  <p>3. How often have you felt tired?</p>
+  <input type="radio" name="q3" value="1" required>1
+  <input type="radio" name="q3" value="2">2
+  <input type="radio" name="q3" value="3">3
+  <input type="radio" name="q3" value="4">4
+  <input type="radio" name="q3" value="5">5
+  <br><br>
+  <button type="button" onclick="nextStep()">Next</button>
+</div>
+
+<!-- STEP 4 -->
+<div class="quiz-step">
+  <p>4. How often have you had trouble sleeping?</p>
+  <input type="radio" name="q4" value="1" required>1
+  <input type="radio" name="q4" value="2">2
+  <input type="radio" name="q4" value="3">3
+  <input type="radio" name="q4" value="4">4
+  <input type="radio" name="q4" value="5">5
+  <br><br>
+  <button type="button" onclick="nextStep()">Next</button>
+</div>
+
+<!-- STEP 5 -->
+<div class="quiz-step">
+  <p>5. How often have you felt low?</p>
+  <input type="radio" name="q5" value="1" required>1
+  <input type="radio" name="q5" value="2">2
+  <input type="radio" name="q5" value="3">3
+  <input type="radio" name="q5" value="4">4
+  <input type="radio" name="q5" value="5">5
+  <br><br>
+  <button type="button" onclick="nextStep()">Next</button>
+</div>
+
+<!-- STEP 6 -->
+<div class="quiz-step">
+  <p>6. How often have you felt overwhelmed?</p>
+  <input type="radio" name="q6" value="1" required>1
+  <input type="radio" name="q6" value="2">2
+  <input type="radio" name="q6" value="3">3
+  <input type="radio" name="q6" value="4">4
+  <input type="radio" name="q6" value="5">5
+  <br><br>
+  <button type="button" onclick="nextStep()">Next</button>
+</div>
+
+<!-- STEP 7 -->
+<div class="quiz-step">
+  <p>7. How often have you felt unmotivated?</p>
+  <input type="radio" name="q7" value="1" required>1
+  <input type="radio" name="q7" value="2">2
+  <input type="radio" name="q7" value="3">3
+  <input type="radio" name="q7" value="4">4
+  <input type="radio" name="q7" value="5">5
+  <br><br>
+  <button type="button" onclick="nextStep()">Next</button>
+</div>
+
+<!-- STEP 8 -->
+<div class="quiz-step">
+  <p>8. How often have you felt distracted?</p>
+  <input type="radio" name="q8" value="1" required>1
+  <input type="radio" name="q8" value="2">2
+  <input type="radio" name="q8" value="3">3
+  <input type="radio" name="q8" value="4">4
+  <input type="radio" name="q8" value="5">5
+  <br><br>
+  <button type="button" onclick="nextStep()">Next</button>
+</div>
+
+<!-- STEP 9 -->
+<div class="quiz-step">
+  <p>9. How often have you felt irritated?</p>
+  <input type="radio" name="q9" value="1" required>1
+  <input type="radio" name="q9" value="2">2
+  <input type="radio" name="q9" value="3">3
+  <input type="radio" name="q9" value="4">4
+  <input type="radio" name="q9" value="5">5
+  <br><br>
+  <button type="button" onclick="nextStep()">Next</button>
+</div>
+
+<!-- STEP 10 -->
+<div class="quiz-step">
+  <p>10. How often have you felt happy?</p>
+  <input type="radio" name="q10" value="1" required>1
+  <input type="radio" name="q10" value="2">2
+  <input type="radio" name="q10" value="3">3
+  <input type="radio" name="q10" value="4">4
+  <input type="radio" name="q10" value="5">5
+  <br><br>
+  <button type="submit" class="btn-primary">Submit</button>
+</div>
+🔥 STEP 2 — ADD THIS JS (VERY IMPORTANT)
+At bottom of file:
+
+<script>
+let currentStep = 0;
+const steps = document.querySelectorAll(".quiz-step");
+
+function showStep(index) {
+  steps.forEach((step, i) => {
+    step.style.display = i === index ? "block" : "none";
+  });
+}
+
+function nextStep() {
+  currentStep++;
+  showStep(currentStep);
+}
+
+showStep(0);
+</script>
+🔥 STEP 3 — FIX NAV LINK
+Replace:
+
+href="index.html"
+with:
+
+href="/"
+🔥 RESULT
+Now you have:
+
+👉 One question per page ✅
+👉 Proper form submission ✅
+👉 Flask-compatible inputs (q1–q10) ✅
+👉 Clean UI preserved ✅
+
+⚠️ FINAL REALITY CHECK
+Before:
+
+UI looked good ❌
+
+System broken ❌
+
+After:
+
+UI works ✅
+
+Backend works ✅
+
+DB stores data ✅
+
+🔥 NEXT STEP
+Now run system.
+
+Then tell me:
+
+👉 “Submission working”
+OR
+👉 send error
+
+Next we fix:
+👉 result page + explanation (this is where marks come from)
+
+
+
+
