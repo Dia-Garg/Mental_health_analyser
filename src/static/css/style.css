@@ -243,3 +243,30 @@ footer a:hover { color: var(--white); }
 @media (max-width: 600px) {
   .hero-trust, .hero-actions { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
 }
+
+/* SCORE TABLE */
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.score-table th {
+  background: var(--cream-mid);
+  color: var(--slate);
+  font-weight: 500;
+  padding: 10px;
+  border: 1px solid var(--tan);
+  text-align: left;
+}
+
+.score-table td {
+  padding: 10px;
+  border: 1px solid var(--tan);
+  color: var(--slate-mid);
+}
+
+.score-table tr:hover {
+  background: var(--cream);
+}

@@ -1,51 +1,46 @@
 # 🧠 Mental Health Analyzer
 
-A DBMS-based web application that evaluates user responses to mental health questions, calculates a score, and classifies mental health status using predefined reference data.
+A full-stack DBMS project that analyzes user responses to mental health questions, calculates a score, and classifies mental well-being using predefined ranges.
 
 ---
 
 ## 🚀 Features
-- Interactive frontend for user input (10-question assessment)
-- Automatic score calculation using SQL Trigger
-- Mental health classification using score ranges
-- Demonstrates core DBMS concepts:
-  - Constraints, Aggregate Functions, Set Operations  
-  - Joins, Subqueries, Views  
-  - Triggers, Stored Procedures, Cursors  
+- 10-question interactive assessment  
+- Real-time input validation  
+- Flask backend with MySQL integration  
+- Score calculation & mental health classification  
+- Result display with interpretation table  
 
 ---
 
 ## 🛠️ Tech Stack
 - **Frontend:** HTML, CSS, JavaScript  
-- **Backend:** Python (Flask - in progress)  
+- **Backend:** Python (Flask)  
 - **Database:** MySQL  
 
 ---
 
-## 📂 Project Structure
+## ⚙️ Setup
 
-mental-health-dbms/
-├── src/ # Backend (Python)
-├── templates/ # HTML (Frontend pages)
-├── static/ # CSS / JS
-├── database/ # SQL scripts (schema, queries, triggers)
-├── docs/ # Report
-├── results/ # Query outputs & screenshots
+### 1. Install dependencies
+```bash
+pip install flask mysql-connector-python
+2. Setup database
+Run schema.sql
+Run insert-data.sql
+3. Run the app
+cd src
+python app.py
+4. Open in browser
+http://127.0.0.1:5000
+📊 Database
 
+Tables used:
 
----
+users
+assessments
+responses
+mental_health_reference
+⚠️ Disclaimer
 
-## ⚙️ How to Run
-
-### 1. Setup Database
-- Run `schema.sql`
-- Run `insert_data.sql`
-
-### 2. Run Frontend
-- Open `index.html` in browser  
-- Fill user details and answer questions  
-
-### 3. (In Progress)
-- Backend integration using Flask to connect frontend with database
-
----
+This is an academic project and not a clinical diagnostic tool.

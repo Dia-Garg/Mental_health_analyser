@@ -13,11 +13,11 @@
 
   <!-- NAV -->
   <nav id="navbar">
-    <a href="index.html" class="nav-logo">
+    <a href="/" class="nav-logo">
       <span class="dot"></span>MindCheck
     </a>
     <ul class="nav-links">
-      <li><a href="index.html">← Back to home</a></li>
+      <li><a href="/">← Back to home</a></li>
     </ul>
   </nav>
 
@@ -50,9 +50,16 @@
         </div>
         <div class="form-group">
           <label for="user-email">Email address</label>
-          <input type="email" id="user-email" placeholder="e.g. ananya@example.com" autocomplete="off" />
+          <input type="email" id="user-email" required placeholder="e.g. ananya@example.com" autocomplete="off" />
         </div>
-        <div id="info-error" class="field-error" style="display:none;">Please fill in both fields to continue.</div>
+        <div id="info-error" class="field-error" style="display:none;">Please fill in both fields to continue.
+        {% if error %}
+          <div class="field-error" style="display:block;">
+            {{ error }}
+          </div>
+        {% endif %}
+        </div>
+
       </div>
       <div style="text-align:center;">
         <button class="btn-primary" onclick="startQuiz()">
@@ -89,3 +96,4 @@
   <script src="/static/js/questionnaire.js"></script>
 </body>
 </html>
+

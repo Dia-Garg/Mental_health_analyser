@@ -30,22 +30,32 @@ def submit():
     email = request.form['user_email']
     if not name or not email:
         return "Invalid input", 400
+    if '@' not in email or '.' not in email:
+        return render_template('Questionnaire.html', error="Invalid email format")
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
     try:
         cursor.execute(
-        "INSERT INTO users (user_name, user_email) VALUES (%s, %s)",
-        (name, email)
+            "INSERT INTO users (user_name, user_email) VALUES (%s, %s)",
+            (name, email)
         )
         user_id = cursor.lastrowid
-    except:
+
+    except Exception as e:
+        print("INSERT ERROR:", e)
+
         cursor.execute(
-        "SELECT user_id FROM users WHERE user_email = %s",
-        (email,)
+            "SELECT user_id FROM users WHERE user_email = %s",
+            (email,)
         )
-    user_id = cursor.fetchone()[0]
+        row = cursor.fetchone()
+
+        if row:
+            user_id = row[0]
+        else:
+            return "User creation failed", 500
 
     # Create assessment
     cursor.execute(

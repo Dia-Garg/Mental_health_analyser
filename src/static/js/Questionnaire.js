@@ -65,10 +65,19 @@ function startQuiz() {
   const email = document.getElementById('user-email').value.trim();
   const err   = document.getElementById('info-error');
 
-  if (!name || !email) {
-    err.style.display = 'block';
-    return;
-  }
+  // Basic email regex
+const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+if (!name || !email) {
+  err.textContent = "Please fill in both fields.";
+  err.style.display = 'block';
+  return;
+}
+
+if (!emailValid) {
+  err.textContent = "Please enter a valid email address.";
+  err.style.display = 'block';
+  return;
+}
   err.style.display = 'none';
 
   quizStarted = true;
